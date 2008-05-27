@@ -4,7 +4,7 @@
 """
 titlecase.py v0.1
 Original Perl version by: John Gruber http://daringfireball.net/ 10 May 2008
-Python port by Stuart Colville http://muffinresearch.co.uk
+Python version by Stuart Colville http://muffinresearch.co.uk
 License: http://www.opensource.org/licenses/mit-license.php
 """
 
@@ -22,52 +22,41 @@ def titlecase(text):
     The list of "small words" which are not capped comes from
     the New York Times Manual of Style, plus 'vs' and 'v'.
     """
+    small = 'a|an|and|as|at|but|by|en|for|if|in|of|on|or|the|to|v\.?|via|vs\.?'
+    punct = "[!\"#$%&'()*+,-./:;?@[\\\\\\]_`{|}~]"
 
-    small = '(a|an|and|as|at|but|by|en|for|if \
-            |in|of|on|or|the|to|v\.?|via|vs\.?)'
-    punct = "([!\"#$%&'()*+,-./:;?@[\\\\\\]_`{|}~]*)"
-    start_words = re.compile(r'^%s%s\b' % (punct, small), re.I)
-    end_words = re.compile(r'\b%s%s$' % (small, punct), re.I)
-    small_words = re.compile(r'\b%s\b' % small,  re.I)
-    inline_period = re.compile(r'[a-zA-Z]\.[a-zA-Z]')
-    words = re.compile(r"([A-Za-z][a-z.'“]*)")
-    plural = re.compile(r"(['’])S\b")
-    ampersand = re.compile(r'\b(AT&T|Q&A)\b', re.I)
-    versus = re.compile(r" V(s?)\. ")
-    pieces = re.compile(r'( [:.;?!][ ] | (?:[ ]|^)["“] )', re.X)
+    small_words = re.compile(r'^(%s)$' % small, re.I)
+    inline_period = re.compile(r'[a-zA-Z][.][a-zA-Z]')
+    uc_elsewhere = re.compile(r'%s*?[a-zA-Z]+[A-Z]+?' % punct)
+    capfirst = re.compile(r"^%s*?([A-Za-z])" % punct)
+    small_first = re.compile(r'^(%s*)(%s)\b' % (punct, small), re.I)
+    small_last = re.compile(r'\b(%s)%s?$' % (small, punct), re.I)
+    subphrase = re.compile(r'([:.;?!][ ])(%s)' % small)
 
-    parts = re.split(pieces, text)
+    words = re.split('\s', text)
+    line = []
+    for word in words:
+        if inline_period.search(word) or uc_elsewhere.match(word):
+            line.append(word)
+            continue
+        if small_words.match(word):
+            line.append(word.lower())
+            continue
+        line.append(capfirst.sub(lambda m: m.group(0).upper(), word))
 
-    lines = []
-    for part in parts:
-        line = words.sub(
-            lambda submatch: re.match(inline_period, submatch.group(0))
-                and submatch.group(0)
-                or submatch.group(0).capitalize()
-        , part)
-        line = small_words.sub(
-            lambda small_word: small_word.group(0).lower(), line
-        )
-        line = start_words.sub(
-            lambda start: '%s%s' % (start.group(1), start.group(2).capitalize())
-        , line)
-        line = end_words.sub(lambda end: end.group(0).capitalize(), line)
+    line = " ".join(line)
 
-        lines.append(line)
-
-    line = ''.join(lines)
-    line = versus.sub(r" v\1. ", line) # vs vs. v and v. special case
-    line = plural.sub(r'\1s', line)  # plurals
-    line = ampersand.sub(lambda m: m.group(0).upper(), line) # AT&T and Q&A
-
+    line = small_first.sub(lambda m: '%s%s' % (m.group(1), m.group(2).capitalize()), line)
+    line = small_last.sub(lambda m: m.group(0).capitalize(), line)
+    line = subphrase.sub(lambda m: '%s%s' % (m.group(1), m.group(2).capitalize()), line)
     return line
 
 class TitlecaseTests(unittest.TestCase):
-    
+
     """ Tests to ensure titlecase follows all of the rules """
 
     def test_q_and_a(self):
-        """ Testing: Q&A With Steve Jobs: 'That's What Happens In 
+        """ Testing: Q&A With Steve Jobs: 'That's What Happens In
         Technology' """
         text = titlecase(
             "Q&A With Steve Jobs: 'That's What Happens In Technology'"
@@ -118,7 +107,7 @@ class TitlecaseTests(unittest.TestCase):
         self.assertEqual(text, result, "%s should be: %s" % (text, result, ))
 
     def test_small_word_quoted(self):
-        """ Testing: 'by the Way, small word at the start but within 
+        """ Testing: 'by the Way, small word at the start but within
         quotes.'"""
         text = titlecase(
             "'by the Way, small word at the start but within quotes.'"
@@ -133,7 +122,7 @@ class TitlecaseTests(unittest.TestCase):
         self.assertEqual(text, result, "%s should be: %s" % (text, result, ))
 
     def test_sub_phrase_small_word(self):
-        """ Testing: Starting Sub-Phrase With a Small Word: a Trick, 
+        """ Testing: Starting Sub-Phrase With a Small Word: a Trick,
         Perhaps?
         """
         text = titlecase(
@@ -143,7 +132,7 @@ class TitlecaseTests(unittest.TestCase):
         self.assertEqual(text, result, "%s should be: %s" % (text, result, ))
 
     def test_small_word_quotes(self):
-        """ Testing: Sub-Phrase With a Small Word in Quotes: 'a Trick, 
+        """ Testing: Sub-Phrase With a Small Word in Quotes: 'a Trick,
         Perhaps?' """
         text = titlecase(
             "Sub-Phrase With a Small Word in Quotes: 'a Trick, Perhaps?'"
@@ -152,7 +141,7 @@ class TitlecaseTests(unittest.TestCase):
         self.assertEqual(text, result, "%s should be: %s" % (text, result, ))
 
     def test_small_word_double_quotes(self):
-        """ Testing: Sub-Phrase With a Small Word in Quotes: \"a Trick, 
+        """ Testing: Sub-Phrase With a Small Word in Quotes: \"a Trick,
         Perhaps?\" """
         text = titlecase(
             'Sub-Phrase With a Small Word in Quotes: "a Trick, Perhaps?"'
@@ -179,18 +168,60 @@ class TitlecaseTests(unittest.TestCase):
         self.assertEqual(text, result, "%s should be: %s" % (text, result, ))
 
     def test_vapourware(self):
-        """ Testing: '2lmc Spool: 'Gruber on OmniFocus and Vapo(u)rware' """
+        """ Testing: 2lmc Spool: 'Gruber on OmniFocus and Vapo(u)rware' """
         text = titlecase(
-            "'2lmc Spool: 'Gruber on OmniFocus and Vapo(u)rware'"
+            "2lmc Spool: 'Gruber on OmniFocus and Vapo(u)rware'"
         )
         result = "2lmc Spool: 'Gruber on OmniFocus and Vapo(u)rware'"
         self.assertEqual(text, result, "%s should be: %s" % (text, result, ))
 
-if __name__ == '__main__':    
+    def test_domains(self):
+        """ Testing: this is just an example.com """
+        text = titlecase('this is just an example.com')
+        result = 'This Is Just an example.com'
+        self.assertEqual(text, result, "%s should be: %s" % (text, result, ))
+
+    def test_domains2(self):
+        """ Testing: this is something listed on an del.icio.us """
+        text = titlecase('this is something listed on del.icio.us')
+        result = 'This Is Something Listed on del.icio.us'
+        self.assertEqual(text, result, "%s should be: %s" % (text, result, ))
+
+    def test_itunes(self):
+        """ Testing: iTunes should be unmolested """
+        text = titlecase('iTunes should be unmolested')
+        result = 'iTunes Should Be Unmolested'
+        self.assertEqual(text, result, "%s should be: %s" % (text, result, ))
+        
+    def test_thoughts_on_music(self):
+        """ Testing: Reading Between the Lines of Steve Jobs’s ‘Thoughts on 
+        Music’ """
+        text = titlecase(
+            'Reading Between the Lines of Steve Jobs’s ‘Thoughts on Music’'
+        )
+        result = 'Reading Between the Lines of Steve Jobs’s ‘Thoughts on Music’'
+        self.assertEqual(text, result, "%s should be: %s" % (text, result, ))
+        
+    def test_repair_perms(self):
+        """ Testing: Seriously, ‘Repair Permissions’ Is Voodoo """
+        text = titlecase('Seriously, ‘Repair Permissions’ Is Voodoo')
+        result = 'Seriously, ‘Repair Permissions’ Is Voodoo'
+        self.assertEqual(text, result, "%s should be: %s" % (text, result, ))
+        
+    def test_generalissimo(self):
+        """ Testing: Generalissimo Francisco Franco: Still Dead; Kieren McCarthy: Still a Jackass """
+        text = titlecase(
+            'Generalissimo Francisco Franco: Still Dead; Kieren McCarthy: Still a Jackass'
+        )
+        result = 'Generalissimo Francisco Franco: Still Dead; Kieren McCarthy: Still a Jackass'
+        self.assertEqual(text, result, "%s should be: %s" % (text, result, ))        
+
+
+if __name__ == '__main__':
     if not sys.stdin.isatty():
         for line in sys.stdin:
             try:
-                print titlecase(line),
+                print titlecase(line)
             except:
                 pass
     else:
