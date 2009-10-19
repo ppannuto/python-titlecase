@@ -1,190 +1,169 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+"""Tests for titlecase"""
+
+
+import os
+import sys
 import unittest
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../'))
+
+
 from titlecase import titlecase
 
 
+TEST_DATA = (
+    (
+        "Q&A with steve jobs: 'that's what happens in technology'",
+        "Q&A With Steve Jobs: 'That's What Happens in Technology'"
+    ),
+    (
+        "What is AT&T's problem?",
+        "What Is AT&T's Problem?"
+    ),
+    (
+        "Apple deal with AT&T falls through",
+        "Apple Deal With AT&T Falls Through"
+    ),
+    (
+        "this v that",
+        "This v That"
+    ),
+    (
+        "this v. that",
+        "This v. That"
+    ),
+    (
+        "this vs that",
+        "This vs That"
+    ),
+    (
+        "this vs. that",
+        "This vs. That"
+    ),
+    (
+        "The SEC's Apple probe: what you need to know",
+        "The SEC's Apple Probe: What You Need to Know"
+    ),
+    (
+        "'by the Way, small word at the start but within quotes.'",
+        "'By the Way, Small Word at the Start but Within Quotes.'"
+    ),
+    (
+        "Small word at end is nothing to be afraid of",
+        "Small Word at End Is Nothing to Be Afraid Of"
+    ),
+    (
+        "Starting Sub-Phrase With a Small Word: a Trick, Perhaps?",
+        "Starting Sub-Phrase With a Small Word: A Trick, Perhaps?"
+    ),
+    (    
+        "Sub-Phrase With a Small Word in Quotes: 'a Trick, Perhaps?'",
+        "Sub-Phrase With a Small Word in Quotes: 'A Trick, Perhaps?'"
+    ),
+    (
+        'sub-phrase with a small word in quotes: "a trick, perhaps?"',
+        'Sub-Phrase With a Small Word in Quotes: "A Trick, Perhaps?"'
+    ),
+    (
+        '"Nothing to Be Afraid of?"',
+        '"Nothing to Be Afraid Of?"'
+    ),
+    (
+        '"Nothing to be Afraid Of?"',
+        '"Nothing to Be Afraid Of?"'    
+    ),
+    (   
+        'a thing',
+        'A Thing'
+    ),
+    (
+        "2lmc Spool: 'gruber on OmniFocus and vapo(u)rware'",
+        "2lmc Spool: 'Gruber on OmniFocus and Vapo(u)rware'"
+    ),
+    (
+        'this is just an example.com',
+        'This Is Just an example.com'
+    ),
+    (
+        'this is something listed on del.icio.us',
+        'This Is Something Listed on del.icio.us'
+    ),
+    (
+        'iTunes should be unmolested',
+        'iTunes Should Be Unmolested'
+    ),
+    (
+        'reading between the lines of steve jobs’s ‘thoughts on music’',
+        'Reading Between the Lines of Steve Jobs’s ‘Thoughts on Music’'
+    ),
+    (
+        'seriously, ‘repair permissions’ is voodoo',
+        'Seriously, ‘Repair Permissions’ Is Voodoo'
+    ),
+    (
+        'generalissimo francisco franco: still dead; kieren McCarthy: still a jackass',
+        'Generalissimo Francisco Franco: Still Dead; Kieren McCarthy: Still a Jackass'
+    ),
+    (
+        "O'Reilly should be untouched",
+        "O'Reilly Should Be Untouched"
+    ),
+    (
+        "my name is o'reilly",
+        "My Name Is O'Reilly"
+    ),
+    (
+        "WASHINGTON, D.C. SHOULD BE FIXED BUT MIGHT BE A PROBLEM",
+        "Washington, D.C. Should Be Fixed but Might Be a Problem"
+    ),
+    (
+        "THIS IS ALL CAPS AND SHOULD BE ADDRESSED",
+        "This Is All Caps and Should Be Addressed"
+    )
+)
+
 class TitlecaseTests(unittest.TestCase):
+    """Titlecase Tests"""
+    
+    def test_all_caps_regex(self):
+        """Test - all capitals regex"""
+        from titlecase import ALL_CAPS
+        self.assertTrue(ALL_CAPS.match('THIS IS ALL CAPS'))
 
-    """Tests to ensure titlecase follows all of the rules"""
+    def test_initials_regex(self):
+        """Test - uppercase initals regex with A.B"""
+        from titlecase import UC_INITIALS
+        self.assertTrue(UC_INITIALS.match('A.B'))
 
-    def test_q_and_a(self):
-        """Testing: Q&A With Steve Jobs: 'That's What Happens In Technology' """
-        text = titlecase(
-            "Q&A with steve jobs: 'that's what happens in technology'"
-        )
-        result = "Q&A With Steve Jobs: 'That's What Happens in Technology'"
-        self.assertEqual(text, result, "%s should be: %s" % (text, result, ))
+    def test_initials_regex_2(self):
+        """Test - uppercase initals regex with A.B."""
+        from titlecase import UC_INITIALS
+        self.assertTrue(UC_INITIALS.match('A.B.'))
 
-    def test_at_and_t(self):
-        """Testing: What Is AT&T's Problem?"""
+    def test_initials_regex_3(self):
+        """Test - uppercase initals regex with ABCD"""
+        from titlecase import UC_INITIALS
+        self.assertFalse(UC_INITIALS.match('ABCD'))
 
-        text = titlecase("What is AT&T's problem?")
-        result = "What Is AT&T's Problem?"
-        self.assertEqual(text, result, "%s should be: %s" % (text, result, ))
+def io_test_generator(in_, out):
+    """Builds basic tests"""
+    def test(self):
+        """Stub test"""
+        return self.assertEqual(titlecase(in_), out)
 
-    def test_apple_deal(self):
-        """Testing: Apple Deal With AT&T Falls Through"""
+    return test
 
-        text = titlecase("Apple deal with AT&T falls through")
-        result = "Apple Deal With AT&T Falls Through"
-        self.assertEqual(text, result, "%s should be: %s" % (text, result, ))
-
-    def test_this_v_that(self):
-        """Testing: this v that"""
-        text = titlecase("this v that")
-        result = "This v That"
-        self.assertEqual(text, result, "%s should be: %s" % (text, result, ))
-
-    def test_this_v_that2(self):
-        """Testing: this v. that"""
-
-        text = titlecase("this v. that")
-        result = "This v. That"
-        self.assertEqual(text, result, "%s should be: %s" % (text, result, ))
-
-    def test_this_vs_that(self):
-        """Testing: this vs that"""
-
-        text = titlecase("this vs that")
-        result = "This vs That"
-        self.assertEqual(text, result, "%s should be: %s" % (text, result, ))
-
-    def test_this_vs_that2(self):
-        """Testing: this vs. that"""
-
-        text = titlecase("this vs. that")
-        result = "This vs. That"
-        self.assertEqual(text, result, "%s should be: %s" % (text, result, ))
-
-    def test_apple_sec(self):
-        """Testing: The SEC's Apple Probe: What You Need to Know"""
-
-        text = titlecase("The SEC's Apple Probe: What You Need to Know")
-        result = "The SEC's Apple Probe: What You Need to Know"
-        self.assertEqual(text, result, "%s should be: %s" % (text, result, ))
-
-    def test_small_word_quoted(self):
-        """Testing: 'by the Way, Small word at the start but within quotes.'"""
-
-        text = titlecase(
-            "'by the Way, small word at the start but within quotes.'"
-        )
-        result = "'By the Way, Small Word at the Start but Within Quotes.'"
-        self.assertEqual(text, result, "%s should be: %s" % (text, result, ))
-
-    def test_small_word_end(self):
-        """Testing: Small word at end is nothing to be afraid of"""
-
-        text = titlecase("Small word at end is nothing to be afraid of")
-        result = "Small Word at End Is Nothing to Be Afraid Of"
-        self.assertEqual(text, result, "%s should be: %s" % (text, result, ))
-
-    def test_sub_phrase_small_word(self):
-        """Testing: Starting Sub-Phrase With a Small Word: a Trick, Perhaps?"""
-
-        text = titlecase(
-            "Starting Sub-Phrase With a Small Word: a Trick, Perhaps?"
-        )
-        result = "Starting Sub-Phrase With a Small Word: A Trick, Perhaps?"
-        self.assertEqual(text, result, "%s should be: %s" % (text, result, ))
-
-    def test_small_word_quotes(self):
-        """Testing: Sub-Phrase With a Small Word in Quotes: 'a Trick..."""
-
-        text = titlecase(
-            "Sub-Phrase With a Small Word in Quotes: 'a Trick, Perhaps?'"
-        )
-        result = "Sub-Phrase With a Small Word in Quotes: 'A Trick, Perhaps?'"
-        self.assertEqual(text, result, "%s should be: %s" % (text, result, ))
-
-    def test_small_word_double_quotes(self):
-        """Testing: Sub-Phrase With a Small Word in Quotes: \"a Trick..."""
-        text = titlecase(
-            'Sub-Phrase With a Small Word in Quotes: "a Trick, Perhaps?"'
-        )
-        result = 'Sub-Phrase With a Small Word in Quotes: "A Trick, Perhaps?"'
-        self.assertEqual(text, result, "%s should be: %s" % (text, result, ))
-
-    def test_nothing_to_be_afraid_of(self):
-        """Testing: \"Nothing to Be Afraid of?\""""
-        text = titlecase('"Nothing to Be Afraid of?"')
-        result = '"Nothing to Be Afraid Of?"'
-        self.assertEqual(text, result, "%s should be: %s" % (text, result, ))
-
-    def test_nothing_to_be_afraid_of2(self):
-        """Testing: \"Nothing to Be Afraid Of?\""""
-
-        text = titlecase('"Nothing to be Afraid Of?"')
-        result = '"Nothing to Be Afraid Of?"'
-        self.assertEqual(text, result, "%s should be: %s" % (text, result, ))
-
-    def test_a_thing(self):
-        """Testing: a thing"""
-
-        text = titlecase('a thing')
-        result = 'A Thing'
-        self.assertEqual(text, result, "%s should be: %s" % (text, result, ))
-
-    def test_vapourware(self):
-        """Testing: 2lmc Spool: 'Gruber on OmniFocus and Vapo(u)rware'"""
-        text = titlecase(
-            "2lmc Spool: 'gruber on OmniFocus and vapo(u)rware'"
-        )
-        result = "2lmc Spool: 'Gruber on OmniFocus and Vapo(u)rware'"
-        self.assertEqual(text, result, "%s should be: %s" % (text, result, ))
-
-    def test_domains(self):
-        """Testing: this is just an example.com"""
-        text = titlecase('this is just an example.com')
-        result = 'This Is Just an example.com'
-        self.assertEqual(text, result, "%s should be: %s" % (text, result, ))
-
-    def test_domains2(self):
-        """Testing: this is something listed on an del.icio.us"""
-
-        text = titlecase('this is something listed on del.icio.us')
-        result = 'This Is Something Listed on del.icio.us'
-        self.assertEqual(text, result, "%s should be: %s" % (text, result, ))
-
-    def test_itunes(self):
-        """Testing: iTunes should be unmolested"""
-
-        text = titlecase('iTunes should be unmolested')
-        result = 'iTunes Should Be Unmolested'
-        self.assertEqual(text, result, "%s should be: %s" % (text, result, ))
-
-    def test_thoughts_on_music(self):
-        """Testing: Reading Between the Lines of Steve Jobs’s..."""
-
-        text = titlecase(
-            'Reading between the lines of steve jobs’s ‘thoughts on music’'
-        )
-        result = 'Reading Between the Lines of Steve Jobs’s ‘Thoughts on '\
-            'Music’'
-        self.assertEqual(text, result, "%s should be: %s" % (text, result, ))
-
-    def test_repair_perms(self):
-        """Testing: Seriously, ‘Repair Permissions’ Is Voodoo"""
-
-        text = titlecase('seriously, ‘repair permissions’ is voodoo')
-        result = 'Seriously, ‘Repair Permissions’ Is Voodoo'
-        self.assertEqual(text, result, "%s should be: %s" % (text, result, ))
-
-    def test_generalissimo(self):
-        """Testing: Generalissimo Francisco Franco..."""
-
-        text = titlecase(
-            'generalissimo francisco franco: still dead; kieren McCarthy: '\
-                'still a jackass'
-        )
-        result = 'Generalissimo Francisco Franco: Still Dead; Kieren '\
-            'McCarthy: Still a Jackass'
-        self.assertEqual(text, result, "%s should be: %s" % (text, result, ))
-
-
+    
 if __name__ == "__main__":
+    
+    for i, test in enumerate(TEST_DATA):
+        test_func = io_test_generator(test[0], test[1])
+        test_func.__doc__ =  test[0]
+        setattr(TitlecaseTests, "test_%s" % i, test_func)
+
     suite = unittest.TestLoader().loadTestsFromTestCase(TitlecaseTests)
     unittest.TextTestRunner(verbosity=2).run(suite)
 

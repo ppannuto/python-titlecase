@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 """
-titlecase.py v0.3
 Original Perl version by: John Gruber http://daringfireball.net/ 10 May 2008
 Python version by Stuart Colville http://muffinresearch.co.uk
 License: http://www.opensource.org/licenses/mit-license.php
@@ -12,18 +11,21 @@ import sys
 import re
 
 __all__ = ['titlecase']
-
+__version__ = '0.5'
 
 SMALL = 'a|an|and|as|at|but|by|en|for|if|in|of|on|or|the|to|v\.?|via|vs\.?'
-PUNCT = "[!\"#$%&'‘()*+,-./:;?@[\\\\\\]_`{|}~]"
+PUNCT = r"""!"#$%&'‘()*+,\-./:;?@[\\\]_`{|}~"""
 
 SMALL_WORDS = re.compile(r'^(%s)$' % SMALL, re.I)
-INLINE_PERIOD = re.compile(r'[a-zA-Z][.][a-zA-Z]')
-UC_ELSEWHERE = re.compile(r'%s*?[a-zA-Z]+[A-Z]+?' % PUNCT)
-CAPFIRST = re.compile(r"^%s*?([A-Za-z])" % PUNCT)
-SMALL_FIRST = re.compile(r'^(%s*)(%s)\b' % (PUNCT, SMALL), re.I)
-SMALL_LAST = re.compile(r'\b(%s)%s?$' % (SMALL, PUNCT), re.I)
+INLINE_PERIOD = re.compile(r'[a-z][.][a-z]', re.I)
+UC_ELSEWHERE = re.compile(r'[%s]*?[a-zA-Z]+[A-Z]+?' % PUNCT)
+CAPFIRST = re.compile(r"^[%s]*?([A-Za-z])" % PUNCT)
+SMALL_FIRST = re.compile(r'^([%s]*)(%s)\b' % (PUNCT, SMALL), re.I)
+SMALL_LAST = re.compile(r'\b(%s)[%s]?$' % (SMALL, PUNCT), re.I)
 SUBPHRASE = re.compile(r'([:.;?!][ ])(%s)' % SMALL)
+APOS_SECOND = re.compile(r"^[dol]{1}['‘]{1}[a-z]+$", re.I)
+ALL_CAPS = re.compile(r'^[A-Z\s%s]+$' % PUNCT)
+UC_INITIALS = re.compile(r"^(?:[A-Z]{1}\.{1}|[A-Z]{1}\.{1}[A-Z]{1})+$")
 
 def titlecase(text):
 
@@ -37,38 +39,57 @@ def titlecase(text):
     the New York Times Manual of Style, plus 'vs' and 'v'.
 
     """
-
+    
+    all_caps = ALL_CAPS.match(text)
+    
     words = re.split('\s', text)
     line = []
     for word in words:
+        if all_caps:
+            if UC_INITIALS.match(word):
+                line.append(word)
+                continue
+            else:
+                word = word.lower()
+        
+        if APOS_SECOND.match(word):
+            word = word.replace(word[0], word[0].upper())
+            word = word.replace(word[2], word[2].upper())
+            line.append(word)
+            continue
         if INLINE_PERIOD.search(word) or UC_ELSEWHERE.match(word):
             line.append(word)
             continue
         if SMALL_WORDS.match(word):
             line.append(word.lower())
             continue
-        line.append(CAPFIRST.sub(lambda m: m.group(0).upper(), word))
+        
+        hyphenated = []
+        for item in word.split('-'):
+            hyphenated.append(CAPFIRST.sub(lambda m: m.group(0).upper(), item))
+        line.append("-".join(hyphenated))
+    
 
-    line = " ".join(line)
+    result = " ".join(line)
 
-    line = SMALL_FIRST.sub(lambda m: '%s%s' % (
+    result = SMALL_FIRST.sub(lambda m: '%s%s' % (
         m.group(1),
         m.group(2).capitalize()
-    ), line)
+    ), result)
 
-    line = SMALL_LAST.sub(lambda m: m.group(0).capitalize(), line)
+    result = SMALL_LAST.sub(lambda m: m.group(0).capitalize(), result)
 
-    line = SUBPHRASE.sub(lambda m: '%s%s' % (
+    result = SUBPHRASE.sub(lambda m: '%s%s' % (
         m.group(1),
         m.group(2).capitalize()
-    ), line)
+    ), result)
 
-    return line
+    return result
 
 
 if __name__ == '__main__':
     if not sys.stdin.isatty():
-        for line in sys.stdin:
-            print titlecase(line)
+        for line_ in sys.stdin:
+            print titlecase(line_)
 
 
