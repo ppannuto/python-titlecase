@@ -6,13 +6,9 @@
 
 import os
 import sys
-import unittest
-
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../'))
 
-
 from titlecase import titlecase
-
 
 TEST_DATA = (
     (
@@ -125,45 +121,37 @@ TEST_DATA = (
     )
 )
 
-class TitlecaseTests(unittest.TestCase):
-    """Titlecase Tests"""
-    
-    def test_all_caps_regex(self):
-        """Test - all capitals regex"""
-        from titlecase import ALL_CAPS
-        self.assertTrue(ALL_CAPS.match('THIS IS ALL CAPS'))
+def test_all_caps_regex():
+    """Test - all capitals regex"""
+    from titlecase import ALL_CAPS
+    assert bool(ALL_CAPS.match('THIS IS ALL CAPS')) is True
 
-    def test_initials_regex(self):
-        """Test - uppercase initals regex with A.B"""
-        from titlecase import UC_INITIALS
-        self.assertTrue(UC_INITIALS.match('A.B'))
+def test_initials_regex():
+    """Test - uppercase initals regex with A.B"""
+    from titlecase import UC_INITIALS
+    assert bool(UC_INITIALS.match('A.B')) is True
 
-    def test_initials_regex_2(self):
-        """Test - uppercase initals regex with A.B."""
-        from titlecase import UC_INITIALS
-        self.assertTrue(UC_INITIALS.match('A.B.'))
+def test_initials_regex_2():
+    """Test - uppercase initals regex with A.B."""
+    from titlecase import UC_INITIALS
+    assert bool(UC_INITIALS.match('A.B.')) is True
 
-    def test_initials_regex_3(self):
-        """Test - uppercase initals regex with ABCD"""
-        from titlecase import UC_INITIALS
-        self.assertFalse(UC_INITIALS.match('ABCD'))
+def test_initials_regex_3():
+    """Test - uppercase initals regex with ABCD"""
+    from titlecase import UC_INITIALS
+    assert bool(UC_INITIALS.match('ABCD')) is False
 
-def io_test_generator(in_, out):
-    """Builds basic tests"""
-    def test(self):
-        """Stub test"""
-        return self.assertEqual(titlecase(in_), out)
+def check_input_matched_output(in_, out):
+    """Function yielded by test generator"""
+    assert titlecase(in_) == out
 
-    return test
+def test_input_output():
+    """Generated tests"""
+    for data in TEST_DATA:
+        yield check_input_matched_output, data[0], data[1]
 
-    
+
 if __name__ == "__main__":
-    
-    for i, test in enumerate(TEST_DATA):
-        test_func = io_test_generator(test[0], test[1])
-        test_func.__doc__ =  test[0]
-        setattr(TitlecaseTests, "test_%s" % i, test_func)
-
-    suite = unittest.TestLoader().loadTestsFromTestCase(TitlecaseTests)
-    unittest.TextTestRunner(verbosity=2).run(suite)
+    import nose
+    nose.main()
 
