@@ -91,5 +91,5 @@ if __name__ == '__main__':
     if not sys.stdin.isatty():
         for line_ in sys.stdin:
             print titlecase(line_)
-
+            sys.exit(0)
 

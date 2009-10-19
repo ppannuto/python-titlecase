@@ -28,11 +28,12 @@ setup(name='titlecase',
     keywords='string formatting',
     author="Stuart Colville",
     author_email="pypi@muffinresearch.co.uk",
-    url="http://www.muffinresearch.co.uk/",
+    url="http://muffinresearch.co.uk/",
     license="MIT",
     packages=find_packages(),
     include_package_data=True,
     zip_safe=False,
+    tests_require=['nose'],
     test_suite="titlecase.tests",
     entry_points = """\
     """
