@@ -118,7 +118,11 @@ TEST_DATA = (
     (
         "THIS IS ALL CAPS AND SHOULD BE ADDRESSED",
         "This Is All Caps and Should Be Addressed"
-    )
+    ),
+    (
+        "Mr McTavish went to MacDonalds",
+        "Mr McTavish Went to MacDonalds"
+    ),
 )
 
 def test_all_caps_regex():
@@ -141,15 +145,20 @@ def test_initials_regex_3():
     from titlecase import UC_INITIALS
     assert bool(UC_INITIALS.match('ABCD')) is False
 
-def check_input_matched_output(in_, out):
+def check_input_matches_expected_output(in_, out):
     """Function yielded by test generator"""
-    assert titlecase(in_) == out
+    try :
+        assert  titlecase(in_) == out
+    except AssertionError:
+        print "%s != %s" % (titlecase(in_), out)
+        raise
+
 
 def test_input_output():
     """Generated tests"""
     for data in TEST_DATA:
-        yield check_input_matched_output, data[0], data[1]
-
+        yield check_input_matches_expected_output, data[0], data[1]
+       
 
 if __name__ == "__main__":
     import nose
