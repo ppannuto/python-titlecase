@@ -7,7 +7,6 @@ Python version by Stuart Colville http://muffinresearch.co.uk
 License: http://www.opensource.org/licenses/mit-license.php
 """
 
-import sys
 import re
 
 __all__ = ['titlecase']
@@ -26,6 +25,7 @@ SUBPHRASE = re.compile(r'([:.;?!][ ])(%s)' % SMALL)
 APOS_SECOND = re.compile(r"^[dol]{1}['‘]{1}[a-z]+$", re.I)
 ALL_CAPS = re.compile(r'^[A-Z\s%s]+$' % PUNCT)
 UC_INITIALS = re.compile(r"^(?:[A-Z]{1}\.{1}|[A-Z]{1}\.{1}[A-Z]{1})+$")
+MAC_MC = re.compile(r"^([Mm](?:a)?c)(\w+)")
 
 def titlecase(text):
 
@@ -62,6 +62,12 @@ def titlecase(text):
             continue
         if SMALL_WORDS.match(word):
             line.append(word.lower())
+            continue
+
+        match = MAC_MC.match(word)
+        if match:
+            line.append("%s%s" % (match.group(1).capitalize(),
+                                  match.group(2).capitalize()))
             continue
         
         hyphenated = []
