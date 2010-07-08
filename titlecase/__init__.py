@@ -10,7 +10,7 @@ License: http://www.opensource.org/licenses/mit-license.php
 import re
 
 __all__ = ['titlecase']
-__version__ = '0.5'
+__version__ = '0.5.1'
 
 SMALL = 'a|an|and|as|at|but|by|en|for|if|in|of|on|or|the|to|v\.?|via|vs\.?'
 PUNCT = r"""!"#$%&'‘()*+,\-./:;?@[\\\]_`{|}~"""
@@ -40,55 +40,59 @@ def titlecase(text):
 
     """
     
-    all_caps = ALL_CAPS.match(text)
-    
-    words = re.split('\s', text)
-    line = []
-    for word in words:
-        if all_caps:
-            if UC_INITIALS.match(word):
-                line.append(word)
+    lines = re.split('[\r\n]+', text)
+    processed = []
+    for line in lines:
+        all_caps = ALL_CAPS.match(line)
+        words = re.split('[\t ]', line)
+        tc_line = []
+        for word in words:
+            if all_caps:
+                if UC_INITIALS.match(word):
+                    tc_line.append(word)
+                    continue
+                else:
+                    word = word.lower()
+            
+            if APOS_SECOND.match(word):
+                word = word.replace(word[0], word[0].upper())
+                word = word.replace(word[2], word[2].upper())
+                tc_line.append(word)
                 continue
-            else:
-                word = word.lower()
+            if INLINE_PERIOD.search(word) or UC_ELSEWHERE.match(word):
+                tc_line.append(word)
+                continue
+            if SMALL_WORDS.match(word):
+                tc_line.append(word.lower())
+                continue
+
+            match = MAC_MC.match(word)
+            if match:
+                tc_line.append("%s%s" % (match.group(1).capitalize(),
+                                      match.group(2).capitalize()))
+                continue
+            
+            hyphenated = []
+            for item in word.split('-'):
+                hyphenated.append(CAPFIRST.sub(lambda m: m.group(0).upper(), item))
+            tc_line.append("-".join(hyphenated))
         
-        if APOS_SECOND.match(word):
-            word = word.replace(word[0], word[0].upper())
-            word = word.replace(word[2], word[2].upper())
-            line.append(word)
-            continue
-        if INLINE_PERIOD.search(word) or UC_ELSEWHERE.match(word):
-            line.append(word)
-            continue
-        if SMALL_WORDS.match(word):
-            line.append(word.lower())
-            continue
 
-        match = MAC_MC.match(word)
-        if match:
-            line.append("%s%s" % (match.group(1).capitalize(),
-                                  match.group(2).capitalize()))
-            continue
+        result = " ".join(tc_line)
+
+        result = SMALL_FIRST.sub(lambda m: '%s%s' % (
+            m.group(1),
+            m.group(2).capitalize()
+        ), result)
+
+        result = SMALL_LAST.sub(lambda m: m.group(0).capitalize(), result)
+
+        result = SUBPHRASE.sub(lambda m: '%s%s' % (
+            m.group(1),
+            m.group(2).capitalize()
+        ), result)
         
-        hyphenated = []
-        for item in word.split('-'):
-            hyphenated.append(CAPFIRST.sub(lambda m: m.group(0).upper(), item))
-        line.append("-".join(hyphenated))
-    
+        processed.append(result)
 
-    result = " ".join(line)
-
-    result = SMALL_FIRST.sub(lambda m: '%s%s' % (
-        m.group(1),
-        m.group(2).capitalize()
-    ), result)
-
-    result = SMALL_LAST.sub(lambda m: m.group(0).capitalize(), result)
-
-    result = SUBPHRASE.sub(lambda m: '%s%s' % (
-        m.group(1),
-        m.group(2).capitalize()
-    ), result)
-
-    return result
+    return "\n".join(processed)
 
