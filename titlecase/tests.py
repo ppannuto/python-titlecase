@@ -127,10 +127,6 @@ TEST_DATA = (
         "this shouldn't\nget mangled",
         "This Shouldn't\nGet Mangled"
     ),
-    #(
-        #"foo/bar",
-        #"Foo/Bar"
-    #),
     ( 
         "this is http://foo.com",
         "This Is http://foo.com"
