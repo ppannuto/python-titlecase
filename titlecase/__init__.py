@@ -10,7 +10,7 @@ License: http://www.opensource.org/licenses/mit-license.php
 import re
 
 __all__ = ['titlecase']
-__version__ = '0.5.1'
+__version__ = '0.5.2'
 
 SMALL = 'a|an|and|as|at|but|by|en|for|if|in|of|on|or|the|to|v\.?|via|vs\.?'
 PUNCT = r"""!"#$%&'‘()*+,\-./:;?@[\\\]_`{|}~"""
