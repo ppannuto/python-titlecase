@@ -11,6 +11,18 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../'))
 from titlecase import titlecase
 
 TEST_DATA = (
+    (   
+        "word/word",
+        "Word/Word"
+    ),
+    ( 
+        "dance with me/let’s face the music and dance",
+        "Dance With Me/Let’s Face the Music and Dance"
+    ),
+    (
+        "34th 3rd 2nd",
+        "34th 3rd 2nd"
+    ),
     (
         "Q&A with steve jobs: 'that's what happens in technology'",
         "Q&A With Steve Jobs: 'That's What Happens in Technology'"

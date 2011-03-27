@@ -71,12 +71,18 @@ def titlecase(text):
                 tc_line.append("%s%s" % (match.group(1).capitalize(),
                                       match.group(2).capitalize()))
                 continue
-            
+
+            if "/" in word and not "//" in word:
+                slashed = []
+                for item in word.split('/'):
+                    slashed.append(CAPFIRST.sub(lambda m: m.group(0).upper(), item))
+                tc_line.append("/".join(slashed))
+                continue
+
             hyphenated = []
             for item in word.split('-'):
                 hyphenated.append(CAPFIRST.sub(lambda m: m.group(0).upper(), item))
             tc_line.append("-".join(hyphenated))
-        
 
         result = " ".join(tc_line)
 
