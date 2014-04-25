@@ -31,6 +31,7 @@ setup(name='titlecase',
     include_package_data=True,
     zip_safe=False,
     tests_require=['nose'],
+    setup_requires=['nose>=1.0'],
     test_suite="titlecase.tests",
     entry_points = """\
     """
