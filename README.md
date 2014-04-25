@@ -15,7 +15,7 @@ as provide a maintained version of this utility. Issues or better pull requests
 are welcome.
 
 Usage
-=====
+-----
 
 To use it is as simple as:
 
