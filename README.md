@@ -19,9 +19,11 @@ Usage
 
 To use it is as simple as:
 
+```
 >>> from titlecase import titlecase
 >>> titlecase('a thing')
 'A Thing'
+```
 
 
 [tc_home]: https://muffinresearch.co.uk/titlecasepy-titlecase-in-python/
