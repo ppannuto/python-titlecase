@@ -3,6 +3,7 @@
 
 """Tests for titlecase"""
 
+from __future__ import print_function
 
 import os
 import sys
@@ -170,7 +171,7 @@ def check_input_matches_expected_output(in_, out):
     try :
         assert  titlecase(in_) == out
     except AssertionError:
-        print "%s != %s" % (titlecase(in_), out)
+        print("{0} != {1}".format(titlecase(in_), out))
         raise
 
 
