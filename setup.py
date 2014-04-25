@@ -3,17 +3,16 @@ import sys
 
 from setuptools import setup, find_packages
 
-here = os.path.abspath(os.path.dirname(__file__))
-README = open(os.path.join(here, 'README.md')).read()
-
-sys.path.insert(0, here)
+def readme():
+    with open('README.rst') as f:
+        return f.read()
 
 from titlecase import __version__
 
 setup(name='titlecase',
     version=__version__,
     description="Python Port of John Gruber's titlecase.pl",
-    long_description=README,
+    long_description=readme(),
     classifiers=[
         "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
@@ -25,7 +24,7 @@ setup(name='titlecase',
     keywords='string formatting',
     author="Stuart Colville",
     author_email="pypi@muffinresearch.co.uk",
-    url="http://muffinresearch.co.uk/",
+    url="https://github.com/lab11/python-titlecase",
     license="MIT",
     packages=find_packages(),
     include_package_data=True,
