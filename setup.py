@@ -7,7 +7,7 @@ use_setuptools()
 from setuptools import setup, find_packages
 
 here = os.path.abspath(os.path.dirname(__file__))
-README = open(os.path.join(here, 'README')).read()
+README = open(os.path.join(here, 'README.md')).read()
 
 sys.path.insert(0, here)
 
