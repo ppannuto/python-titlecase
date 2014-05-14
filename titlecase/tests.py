@@ -143,6 +143,10 @@ TEST_DATA = (
     (
         "this is http://foo.com",
         "This Is http://foo.com"
+    ),
+    (
+        "mac mc MAC MC machine",
+        "Mac Mc MAC MC Machine",
     )
 )
 
