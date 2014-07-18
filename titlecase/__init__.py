@@ -23,7 +23,7 @@ SMALL_FIRST = re.compile(r'^([%s]*)(%s)\b' % (PUNCT, SMALL), re.I)
 SMALL_LAST = re.compile(r'\b(%s)[%s]?$' % (SMALL, PUNCT), re.I)
 SUBPHRASE = re.compile(r'([:.;?!][ ])(%s)' % SMALL)
 APOS_SECOND = re.compile(r"^[dol]{1}['‘]{1}[a-z]+$", re.I)
-ALL_CAPS = re.compile(r'^[A-Z\s%s]+$' % PUNCT)
+ALL_CAPS = re.compile(r'^[A-Z\s\d%s]+$' % PUNCT)
 UC_INITIALS = re.compile(r"^(?:[A-Z]{1}\.{1}|[A-Z]{1}\.{1}[A-Z]{1})+$")
 MAC_MC = re.compile(r"^([Mm]c)(\w+)")
 

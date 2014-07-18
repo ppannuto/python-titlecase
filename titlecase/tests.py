@@ -147,6 +147,10 @@ TEST_DATA = (
     (
         "mac mc MAC MC machine",
         "Mac Mc MAC MC Machine",
+    ),
+    (
+        "FOO BAR 5TH ST",
+        "Foo Bar 5th St",
     )
 )
 
