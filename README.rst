@@ -38,6 +38,7 @@ Titlecase provides only one function, simply:
 A callback function may also be supplied, which will be called for every word:
 
 ::
+
     >>> def abbreviations(word, **kwargs):
     ...   if word.upper() in ('TCP', 'UDP'):
     ...     return word.upper()
