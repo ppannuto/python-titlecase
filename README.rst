@@ -35,3 +35,16 @@ Titlecase provides only one function, simply:
     >>> titlecase('a thing')
     'A Thing'
 
+A callback function may also be supplied, which will be called for every word:
+
+::
+    >>> def abbreviations(word, **kwargs):
+    ...   if word.upper() in ('TCP', 'UDP'):
+    ...     return word.upper()
+    ...
+    >>> titlecase.titlecase('a simple tcp and udp wrapper', callback=abbreviations)
+    'A Simple TCP and UDP Wrapper'
+
+The callback function is supplied with an ``all_caps`` keyword argument, indicating
+whether the entire line of text was entirely capitalized. Returning ``None`` from
+the callback function will allow titlecase to process the word as normal.

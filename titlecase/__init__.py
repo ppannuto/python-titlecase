@@ -28,7 +28,7 @@ UC_INITIALS = re.compile(r"^(?:[A-Z]{1}\.{1}|[A-Z]{1}\.{1}[A-Z]{1})+$")
 MAC_MC = re.compile(r"^([Mm]c)(\w+)")
 
 
-def titlecase(text):
+def titlecase(text, callback=None):
     """
     Titlecases input text
 
@@ -47,6 +47,12 @@ def titlecase(text):
         words = re.split('[\t ]', line)
         tc_line = []
         for word in words:
+            if callback:
+                new_word = callback(word, all_caps=all_caps)
+                if new_word:
+                    tc_line.append(new_word)
+                    continue
+
             if all_caps:
                 if UC_INITIALS.match(word):
                     tc_line.append(word)
