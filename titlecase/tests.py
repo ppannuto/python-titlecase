@@ -198,6 +198,16 @@ def test_input_output():
         yield check_input_matches_expected_output, data[0], data[1]
 
 
+def test_callback():
+    def abbreviation(word, **kwargs):
+        if word.upper() in ('TCP', 'UDP'):
+            return word.upper()
+    s = 'a simple tcp and udp wrapper'
+    assert titlecase(s) == 'A Simple Tcp and Udp Wrapper'
+    assert titlecase(s, callback=abbreviation) == 'A Simple TCP and UDP Wrapper'
+    assert titlecase(s.upper(), callback=abbreviation) == 'A Simple TCP and UDP Wrapper'
+
+
 if __name__ == "__main__":
     import nose
     nose.main()
