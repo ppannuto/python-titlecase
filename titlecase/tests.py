@@ -155,6 +155,26 @@ TEST_DATA = (
     (
         "foo bar 5th st",
         "Foo Bar 5th St",
+    ),
+    (
+        "l'grange l'grange l'Grange l'Grange",
+        "l'Grange l'Grange l'Grange l'Grange",
+    ),
+    (
+        "L'grange L'grange L'Grange L'Grange",
+        "l'Grange l'Grange l'Grange l'Grange",
+    ),
+    (
+        "l'GranGe",
+        "l'GranGe",
+    ),
+    (
+        "o'grange O'grange o'Grange O'Grange",
+        "O'Grange O'Grange O'Grange O'Grange",
+    ),
+    (
+        "O'GranGe",
+        "O'GranGe",
     )
 )
 

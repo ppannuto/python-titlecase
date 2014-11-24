@@ -61,8 +61,10 @@ def titlecase(text, callback=None):
                     word = word.lower()
 
             if APOS_SECOND.match(word):
-                word = word.replace(word[0], word[0].upper())
-                word = word.replace(word[2], word[2].upper())
+                if len(word[0]) == 1 and word[0] not in 'aeiouAEIOU':
+                    word = word[0].lower() + word[1] + word[2].upper() + word[3:]
+                else:
+                    word = word[0].upper() + word[1] + word[2].upper() + word[3:]
                 tc_line.append(word)
                 continue
             if INLINE_PERIOD.search(word) or UC_ELSEWHERE.match(word):
