@@ -179,6 +179,14 @@ TEST_DATA = (
     (
         "o'melveny/o'doyle o'Melveny/o'doyle O'melveny/o'doyle o'melveny/o'Doyle o'melveny/O'doyle",
         "O'Melveny/O'Doyle O'Melveny/O'Doyle O'Melveny/O'Doyle O'Melveny/O'Doyle O'Melveny/O'Doyle",
+    ),
+    (
+        "oblon, spivak, mcclelland, maier & neustadt",
+        "Oblon, Spivak, McClelland, Maier & Neustadt",
+    ),
+    (
+        "Mcoblon, spivak, mcclelland, mcmaier, & mcneustadt",
+        "McOblon, Spivak, McClelland, McMaier, & McNeustadt",
     )
 )
 
