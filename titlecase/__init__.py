@@ -81,16 +81,18 @@ def titlecase(text, callback=None):
                 continue
 
             if "/" in word and "//" not in word:
-                slashed = []
-                for item in word.split('/'):
-                    slashed.append(CAPFIRST.sub(lambda m: m.group(0).upper(), item))
+                slashed = map(lambda t: titlecase(t,callback), word.split('/'))
                 tc_line.append("/".join(slashed))
                 continue
 
-            hyphenated = []
-            for item in word.split('-'):
-                hyphenated.append(CAPFIRST.sub(lambda m: m.group(0).upper(), item))
-            tc_line.append("-".join(hyphenated))
+            if '-' in word:
+                hyphenated = map(lambda t: titlecase(t,callback), word.split('-'))
+                tc_line.append("-".join(hyphenated))
+                continue
+
+            # Just a normal word that needs to be capitalized
+            tc_line.append(CAPFIRST.sub(lambda m: m.group(0).upper(), word))
+
 
         result = " ".join(tc_line)
 

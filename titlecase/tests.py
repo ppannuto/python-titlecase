@@ -175,6 +175,10 @@ TEST_DATA = (
     (
         "O'GranGe",
         "O'GranGe",
+    ),
+    (
+        "o'melveny/o'doyle o'Melveny/o'doyle O'melveny/o'doyle o'melveny/o'Doyle o'melveny/O'doyle",
+        "O'Melveny/O'Doyle O'Melveny/O'Doyle O'Melveny/O'Doyle O'Melveny/O'Doyle O'Melveny/O'Doyle",
     )
 )
 
