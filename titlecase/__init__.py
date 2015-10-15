@@ -28,6 +28,17 @@ UC_INITIALS = re.compile(r"^(?:[A-Z]{1}\.{1}|[A-Z]{1}\.{1}[A-Z]{1})+$")
 MAC_MC = re.compile(r"^([Mm]c)(\w.+)")
 
 
+def set_small_word_list(small=SMALL):
+    global SMALL_WORDS
+    global SMALL_FIRST
+    global SMALL_LAST
+    global SUBPHRASE
+    SMALL_WORDS = re.compile(r'^(%s)$' % small, re.I)
+    SMALL_FIRST = re.compile(r'^([%s]*)(%s)\b' % (PUNCT, small), re.I)
+    SMALL_LAST = re.compile(r'\b(%s)[%s]?$' % (small, PUNCT), re.I)
+    SUBPHRASE = re.compile(r'([:.;?!][ ])(%s)' % small)
+
+
 def titlecase(text, callback=None):
     """
     Titlecases input text
