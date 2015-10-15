@@ -9,7 +9,7 @@ import os
 import sys
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../'))
 
-from titlecase import titlecase
+from titlecase import titlecase, set_small_word_list
 
 TEST_DATA = (
     (
@@ -198,19 +198,19 @@ def test_all_caps_regex():
 
 
 def test_initials_regex():
-    """Test - uppercase initals regex with A.B"""
+    """Test - uppercase initials regex with A.B"""
     from titlecase import UC_INITIALS
     assert bool(UC_INITIALS.match('A.B')) is True
 
 
 def test_initials_regex_2():
-    """Test - uppercase initals regex with A.B."""
+    """Test - uppercase initials regex with A.B."""
     from titlecase import UC_INITIALS
     assert bool(UC_INITIALS.match('A.B.')) is True
 
 
 def test_initials_regex_3():
-    """Test - uppercase initals regex with ABCD"""
+    """Test - uppercase initials regex with ABCD"""
     from titlecase import UC_INITIALS
     assert bool(UC_INITIALS.match('ABCD')) is False
 
@@ -238,6 +238,12 @@ def test_callback():
     assert titlecase(s) == 'A Simple Tcp and Udp Wrapper'
     assert titlecase(s, callback=abbreviation) == 'A Simple TCP and UDP Wrapper'
     assert titlecase(s.upper(), callback=abbreviation) == 'A Simple TCP and UDP Wrapper'
+
+
+def test_set_small_word_list():
+    assert titlecase('playing the game "words with friends"') == 'Playing the Game "Words With Friends"'
+    set_small_word_list('a|an|the|with')
+    assert titlecase('playing the game "words with friends"') == 'Playing the Game "Words with Friends"'
 
 
 if __name__ == "__main__":
