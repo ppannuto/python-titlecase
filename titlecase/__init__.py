@@ -68,8 +68,6 @@ def titlecase(text, callback=None):
                 if UC_INITIALS.match(word):
                     tc_line.append(word)
                     continue
-                else:
-                    word = word.lower()
 
             if APOS_SECOND.match(word):
                 if len(word[0]) == 1 and word[0] not in 'aeiouAEIOU':
@@ -78,7 +76,7 @@ def titlecase(text, callback=None):
                     word = word[0].upper() + word[1] + word[2].upper() + word[3:]
                 tc_line.append(word)
                 continue
-            if INLINE_PERIOD.search(word) or UC_ELSEWHERE.match(word):
+            if INLINE_PERIOD.search(word) or (not all_caps and UC_ELSEWHERE.match(word)):
                 tc_line.append(word)
                 continue
             if SMALL_WORDS.match(word):
@@ -100,6 +98,9 @@ def titlecase(text, callback=None):
                 hyphenated = map(lambda t: titlecase(t,callback), word.split('-'))
                 tc_line.append("-".join(hyphenated))
                 continue
+
+            if all_caps:
+                word = word.lower()
 
             # Just a normal word that needs to be capitalized
             tc_line.append(CAPFIRST.sub(lambda m: m.group(0).upper(), word))
