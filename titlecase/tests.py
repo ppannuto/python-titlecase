@@ -173,6 +173,10 @@ TEST_DATA = (
         "O'Grange O'Grange O'Grange O'Grange",
     ),
     (
+        "o'grange's O'grange's o'Grange's O'Grange's",
+        "O'Grange's O'Grange's O'Grange's O'Grange's",
+    ),
+    (
         "O'GranGe",
         "O'GranGe",
     ),
