@@ -77,6 +77,38 @@ TEST_DATA = (
         'Sub-Phrase With a Small Word in Quotes: "A Trick, Perhaps?"'
     ),
     (
+        "Starting a Hyphen Delimited Sub-Phrase With a Small Word - a Trick, Perhaps?",
+        "Starting a Hyphen Delimited Sub-Phrase With a Small Word - A Trick, Perhaps?"
+    ),
+    (
+        "Hyphen Delimited Sub-Phrase With a Small Word in Quotes - 'a Trick, Perhaps?'",
+        "Hyphen Delimited Sub-Phrase With a Small Word in Quotes - 'A Trick, Perhaps?'"
+    ),
+    (
+        'Hyphen Delimited sub-phrase with a small word in quotes - "a trick, perhaps?"',
+        'Hyphen Delimited Sub-Phrase With a Small Word in Quotes - "A Trick, Perhaps?"'
+    ),
+    (
+        "Snakes on a Plane - The TV Edit - The Famous Line",
+        "Snakes on a Plane - The TV Edit - The Famous Line"
+    ),
+    (
+        "Starting an Em Dash Delimited Sub-Phrase With a Small Word — a Trick, Perhaps?",
+        "Starting an Em Dash Delimited Sub-Phrase With a Small Word — A Trick, Perhaps?"
+    ),
+    (
+        "Em Dash Delimited Sub-Phrase With a Small Word in Quotes — 'a Trick, Perhaps?'",
+        "Em Dash Delimited Sub-Phrase With a Small Word in Quotes — 'A Trick, Perhaps?'"
+    ),
+    (
+        'Em Dash Delimited sub-phrase with a small word in quotes — "a trick, perhaps?"',
+        'Em Dash Delimited Sub-Phrase With a Small Word in Quotes — "A Trick, Perhaps?"'
+    ),
+    (
+        "Snakes on a Plane — The TV Edit — The Famous Line",
+        "Snakes on a Plane — The TV Edit — The Famous Line"
+    ),
+    (
         '"Nothing to Be Afraid of?"',
         '"Nothing to Be Afraid Of?"'
     ),
