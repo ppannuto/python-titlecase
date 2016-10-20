@@ -9,6 +9,6 @@ python:
   - "3.5"
   - "pypy"
 
-install: pip install tox-travis
+install: pip install tox-travis coveralls nose
 script: tox
 
