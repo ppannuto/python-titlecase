@@ -223,6 +223,10 @@ TEST_DATA = (
     (
         "Mcoblon, spivak, mcclelland, mcmaier, & mcneustadt",
         "McOblon, Spivak, McClelland, McMaier, & McNeustadt",
+    ),
+    (
+        "mcfoo-bar, MCFOO-BAR, McFoo-bar, McFoo-Bar, mcfoo-mcbar, foo-mcbar",
+        "McFoo-Bar, McFoo-Bar, McFoo-Bar, McFoo-Bar, McFoo-McBar, Foo-McBar",
     )
 )
 

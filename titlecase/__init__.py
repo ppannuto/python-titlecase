@@ -25,7 +25,7 @@ SUBPHRASE = re.compile(r'([:.;?!\-\—][ ])(%s)' % SMALL)
 APOS_SECOND = re.compile(r"^[dol]{1}['‘]{1}[a-z]+(?:['s]{2})?$", re.I)
 ALL_CAPS = re.compile(r'^[A-Z\s\d%s]+$' % PUNCT)
 UC_INITIALS = re.compile(r"^(?:[A-Z]{1}\.{1}|[A-Z]{1}\.{1}[A-Z]{1})+$")
-MAC_MC = re.compile(r"^([Mm]c)(\w.+)")
+MAC_MC = re.compile(r"^([Mm]c|MC)(\w.+)")
 
 
 def set_small_word_list(small=SMALL):
@@ -76,17 +76,18 @@ def titlecase(text, callback=None):
                     word = word[0].upper() + word[1] + word[2].upper() + word[3:]
                 tc_line.append(word)
                 continue
+
+            match = MAC_MC.match(word)
+            if match:
+                tc_line.append("%s%s" % (match.group(1).capitalize(),
+                                         titlecase(match.group(2),callback)))
+                continue
+
             if INLINE_PERIOD.search(word) or (not all_caps and UC_ELSEWHERE.match(word)):
                 tc_line.append(word)
                 continue
             if SMALL_WORDS.match(word):
                 tc_line.append(word.lower())
-                continue
-
-            match = MAC_MC.match(word)
-            if match:
-                tc_line.append("%s%s" % (match.group(1).capitalize(),
-                                         match.group(2).capitalize()))
                 continue
 
             if "/" in word and "//" not in word:
