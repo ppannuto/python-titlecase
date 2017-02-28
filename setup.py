@@ -42,7 +42,10 @@ setup(name='titlecase',
     tests_require=['nose'],
     setup_requires=['nose>=1.0'],
     test_suite="titlecase.tests",
-    entry_points = """\
-    """
+    entry_points = {
+        'console_scripts': [
+            'titlecase = titlecase.__init__:cmd',
+            ],
+        },
 )
 

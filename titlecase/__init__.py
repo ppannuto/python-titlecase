@@ -7,7 +7,9 @@ Python version by Stuart Colville http://muffinresearch.co.uk
 License: http://www.opensource.org/licenses/mit-license.php
 """
 
+import argparse
 import re
+import sys
 
 __all__ = ['titlecase']
 __version__ = '0.8.2'
@@ -124,3 +126,47 @@ def titlecase(text, callback=None):
         processed.append(result)
 
     return "\n".join(processed)
+
+
+def cmd():
+    '''Handler for command line invocation'''
+
+    # Try to handle any reasonable thing thrown at this.
+    # Consume '-f' and '-o' as input/output, allow '-' for stdin/stdout
+    # and treat any subsequent arguments as a space separated string to
+    # be titlecased (so it still works if people forget quotes)
+    parser = argparse.ArgumentParser()
+    in_group = parser.add_mutually_exclusive_group()
+    in_group.add_argument('string', nargs='*', default=[],
+            help='String to titlecase')
+    in_group.add_argument('-f', '--input-file',
+            help='File to read from to titlecase')
+    parser.add_argument('-o', '--output-file',
+            help='File to write titlecased output to)')
+
+    args = parser.parse_args()
+
+    if args.input_file is not None:
+        if args.input_file == '-':
+            ifile = sys.stdin
+        else:
+            ifile = open(args.input_file)
+    else:
+        ifile = sys.stdin
+
+    if args.output_file is not None:
+        if args.output_file == '-':
+            ofile = sys.stdout
+        else:
+            ofile = open(args.output_file, 'w')
+    else:
+        ofile = sys.stdout
+
+    if args.string is not None:
+        in_string = ' '.join(args.string)
+    else:
+        with ifile:
+            in_string = ifile.read()
+
+    with ofile:
+        ofile.write(titlecase(in_string))
