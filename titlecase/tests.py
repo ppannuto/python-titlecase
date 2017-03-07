@@ -17,6 +17,10 @@ TEST_DATA = (
         "Word/Word"
     ),
     (
+        "a title and/or string",
+        "A Title and/or String"
+    ),
+    (
         "dance with me/let’s face the music and dance",
         "Dance With Me/Let’s Face the Music and Dance"
     ),
