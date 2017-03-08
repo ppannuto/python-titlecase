@@ -20,6 +20,7 @@ titlecase.pl <http://daringfireball.net/2008/05/title_case>`__.
 Issues, updates, pull requests, etc should be directed
 `to github <https://github.com/ppannuto/python-titlecase>`__.
 
+
 Installation
 ------------
 
@@ -28,6 +29,7 @@ The easiest method is to simply use pip:
 ::
 
     (sudo) pip install titlecase
+
 
 Usage
 -----
@@ -54,3 +56,19 @@ A callback function may also be supplied, which will be called for every word:
 The callback function is supplied with an ``all_caps`` keyword argument, indicating
 whether the entire line of text was entirely capitalized. Returning ``None`` from
 the callback function will allow titlecase to process the word as normal.
+
+
+Command Line Usage
+------------------
+
+Titlecase also provides a command line utility ``titlecase``:
+
+::
+
+    $ titlecase make me a title
+    Make Me a Title
+    $ echo "Can pipe and/or whatever else" | titlecase
+    Can Pipe and/or Whatever Else
+    # Or read/write files:
+    $ titlecase -f infile -o outfile
+
