@@ -169,7 +169,7 @@ def cmd():
     else:
         ofile = sys.stdout
 
-    if args.string is not None:
+    if len(args.string) > 0:
         in_string = ' '.join(args.string)
     else:
         with ifile:
