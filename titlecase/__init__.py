@@ -12,7 +12,7 @@ import re
 import sys
 
 __all__ = ['titlecase']
-__version__ = '0.8.2'
+__version__ = '0.8.3'
 
 SMALL = 'a|an|and|as|at|but|by|en|for|if|in|of|on|or|the|to|v\.?|via|vs\.?'
 PUNCT = r"""!"#$%&'‘()*+,\-./:;?@[\\\]_`{|}~"""
@@ -41,7 +41,7 @@ def set_small_word_list(small=SMALL):
     SUBPHRASE = re.compile(r'([:.;?!][ ])(%s)' % small)
 
 
-def titlecase(text, callback=None):
+def titlecase(text, callback=None, small_first_last=True):
     """
     Titlecases input text
 
@@ -82,7 +82,7 @@ def titlecase(text, callback=None):
             match = MAC_MC.match(word)
             if match:
                 tc_line.append("%s%s" % (match.group(1).capitalize(),
-                                         titlecase(match.group(2),callback)))
+                                         titlecase(match.group(2),callback,small_first_last)))
                 continue
 
             if INLINE_PERIOD.search(word) or (not all_caps and UC_ELSEWHERE.match(word)):
@@ -93,12 +93,18 @@ def titlecase(text, callback=None):
                 continue
 
             if "/" in word and "//" not in word:
-                slashed = map(lambda t: titlecase(t,callback), word.split('/'))
+                slashed = map(
+                    lambda t: titlecase(t,callback,False),
+                    word.split('/')
+                )
                 tc_line.append("/".join(slashed))
                 continue
 
             if '-' in word:
-                hyphenated = map(lambda t: titlecase(t,callback), word.split('-'))
+                hyphenated = map(
+                    lambda t: titlecase(t,callback,small_first_last),
+                    word.split('-')
+                )
                 tc_line.append("-".join(hyphenated))
                 continue
 
@@ -111,12 +117,13 @@ def titlecase(text, callback=None):
 
         result = " ".join(tc_line)
 
-        result = SMALL_FIRST.sub(lambda m: '%s%s' % (
-            m.group(1),
-            m.group(2).capitalize()
-        ), result)
+        if small_first_last:
+            result = SMALL_FIRST.sub(lambda m: '%s%s' % (
+                m.group(1),
+                m.group(2).capitalize()
+            ), result)
 
-        result = SMALL_LAST.sub(lambda m: m.group(0).capitalize(), result)
+            result = SMALL_LAST.sub(lambda m: m.group(0).capitalize(), result)
 
         result = SUBPHRASE.sub(lambda m: '%s%s' % (
             m.group(1),
