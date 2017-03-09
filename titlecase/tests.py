@@ -13,6 +13,10 @@ from titlecase import titlecase, set_small_word_list
 
 TEST_DATA = (
     (
+        "",
+        ""
+    ),
+    (
         "word/word",
         "Word/Word"
     ),
