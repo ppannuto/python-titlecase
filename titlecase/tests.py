@@ -268,6 +268,14 @@ def check_input_matches_expected_output(in_, out):
         raise
 
 
+def test_at_and_t():
+    def at_n_t(word, **kwargs):
+        if word.upper() == "AT&T":
+            return word.upper()
+    print(titlecase("at&t", callback=at_n_t))
+    assert titlecase("at&t", callback=at_n_t) == "AT&T"
+
+
 def test_input_output():
     """Generated tests"""
     for data in TEST_DATA:
