@@ -15,7 +15,7 @@ __all__ = ['titlecase']
 __version__ = '0.9.0'
 
 SMALL = 'a|an|and|as|at|but|by|en|for|if|in|of|on|or|the|to|v\.?|via|vs\.?'
-PUNCT = r"""!"#$%&'‘()*+,\-./:;?@[\\\]_`{|}~"""
+PUNCT = r"""!"#$%&'‘()*+,\-–‒—―./:;?@[\\\]_`{|}~"""
 
 SMALL_WORDS = re.compile(r'^(%s)$' % SMALL, re.I)
 INLINE_PERIOD = re.compile(r'[a-z][.][a-z]', re.I)
@@ -23,7 +23,7 @@ UC_ELSEWHERE = re.compile(r'[%s]*?[a-zA-Z]+[A-Z]+?' % PUNCT)
 CAPFIRST = re.compile(r"^[%s]*?([A-Za-z])" % PUNCT)
 SMALL_FIRST = re.compile(r'^([%s]*)(%s)\b' % (PUNCT, SMALL), re.I)
 SMALL_LAST = re.compile(r'\b(%s)[%s]?$' % (SMALL, PUNCT), re.I)
-SUBPHRASE = re.compile(r'([:.;?!\-\—][ ])(%s)' % SMALL)
+SUBPHRASE = re.compile(r'([:.;?!\-–‒—―][ ])(%s)' % SMALL)
 APOS_SECOND = re.compile(r"^[dol]{1}['‘]{1}[a-z]+(?:['s]{2})?$", re.I)
 ALL_CAPS = re.compile(r'^[A-Z\s\d%s]+$' % PUNCT)
 UC_INITIALS = re.compile(r"^(?:[A-Z]{1}\.{1}|[A-Z]{1}\.{1}[A-Z]{1})+$")
