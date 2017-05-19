@@ -13,6 +13,10 @@ from titlecase import titlecase, set_small_word_list
 
 TEST_DATA = (
     (
+        "",
+        ""
+    ),
+    (
         "word/word",
         "Word/Word"
     ),
@@ -274,6 +278,14 @@ def check_input_matches_expected_output(in_, out):
     except AssertionError:
         print("{0} != {1}".format(titlecase(in_), out))
         raise
+
+
+def test_at_and_t():
+    def at_n_t(word, **kwargs):
+        if word.upper() == "AT&T":
+            return word.upper()
+    print(titlecase("at&t", callback=at_n_t))
+    assert titlecase("at&t", callback=at_n_t) == "AT&T"
 
 
 def test_input_output():
