@@ -113,6 +113,14 @@ TEST_DATA = (
         "Snakes on a Plane — The TV Edit — The Famous Line"
     ),
     (
+        "EPISODE 7 — THE FORCE AWAKENS",
+        "Episode 7 — The Force Awakens"
+    ),
+    (
+        "episode 7 – The force awakens",
+        "Episode 7 – The Force Awakens"
+    ),
+    (
         '"Nothing to Be Afraid of?"',
         '"Nothing to Be Afraid Of?"'
     ),
