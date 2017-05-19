@@ -12,7 +12,7 @@ import re
 import sys
 
 __all__ = ['titlecase']
-__version__ = '0.9.0'
+__version__ = '0.9.1'
 
 SMALL = 'a|an|and|as|at|but|by|en|for|if|in|of|on|or|the|to|v\.?|via|vs\.?'
 PUNCT = r"""!"#$%&'‘()*+,\-–‒—―./:;?@[\\\]_`{|}~"""
@@ -28,6 +28,14 @@ APOS_SECOND = re.compile(r"^[dol]{1}['‘]{1}[a-z]+(?:['s]{2})?$", re.I)
 ALL_CAPS = re.compile(r'^[A-Z\s\d%s]+$' % PUNCT)
 UC_INITIALS = re.compile(r"^(?:[A-Z]{1}\.{1}|[A-Z]{1}\.{1}[A-Z]{1})+$")
 MAC_MC = re.compile(r"^([Mm]c|MC)(\w.+)")
+
+
+class ImmutableString(str):
+    pass
+
+
+def _mark_immutable(text):
+    return ImmutableString(text)
 
 
 def set_small_word_list(small=SMALL):
@@ -63,7 +71,7 @@ def titlecase(text, callback=None, small_first_last=True):
             if callback:
                 new_word = callback(word, all_caps=all_caps)
                 if new_word:
-                    tc_line.append(new_word)
+                    tc_line.append(_mark_immutable(new_word))
                     continue
 
             if all_caps:
@@ -114,16 +122,19 @@ def titlecase(text, callback=None, small_first_last=True):
             # Just a normal word that needs to be capitalized
             tc_line.append(CAPFIRST.sub(lambda m: m.group(0).upper(), word))
 
+        if small_first_last and tc_line:
+            if not isinstance(tc_line[0], ImmutableString):
+                tc_line[0] = SMALL_FIRST.sub(lambda m: '%s%s' % (
+                    m.group(1),
+                    m.group(2).capitalize()
+                ), tc_line[0])
+
+            if not isinstance(tc_line[-1], ImmutableString):
+                tc_line[-1] = SMALL_LAST.sub(
+                    lambda m: m.group(0).capitalize(), tc_line[-1]
+                )
 
         result = " ".join(tc_line)
-
-        if small_first_last:
-            result = SMALL_FIRST.sub(lambda m: '%s%s' % (
-                m.group(1),
-                m.group(2).capitalize()
-            ), result)
-
-            result = SMALL_LAST.sub(lambda m: m.group(0).capitalize(), result)
 
         result = SUBPHRASE.sub(lambda m: '%s%s' % (
             m.group(1),
