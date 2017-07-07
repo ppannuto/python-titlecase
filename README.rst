@@ -36,7 +36,7 @@ Usage
 
 Titlecase provides only one function, simply:
 
-::
+.. code-block:: python
 
     >>> from titlecase import titlecase
     >>> titlecase('a thing')
@@ -44,7 +44,7 @@ Titlecase provides only one function, simply:
 
 A callback function may also be supplied, which will be called for every word:
 
-::
+.. code-block:: python
 
     >>> def abbreviations(word, **kwargs):
     ...   if word.upper() in ('TCP', 'UDP'):
@@ -63,7 +63,7 @@ Command Line Usage
 
 Titlecase also provides a command line utility ``titlecase``:
 
-::
+.. code-block:: python
 
     $ titlecase make me a title
     Make Me a Title
