@@ -125,6 +125,14 @@ TEST_DATA = (
         "Episode 7 – The Force Awakens"
     ),
     (
+        "THE CASE OF X ≤ 7",
+        "The Case of X ≤ 7"
+    ),
+    (
+        "the case of X ≤ 7",
+        "The Case of X ≤ 7"
+    ),
+    (
         '"Nothing to Be Afraid of?"',
         '"Nothing to Be Afraid Of?"'
     ),
@@ -245,12 +253,6 @@ TEST_DATA = (
         "McFoo-Bar, McFoo-Bar, McFoo-Bar, McFoo-Bar, McFoo-McBar, Foo-McBar",
     )
 )
-
-
-def test_all_caps_regex():
-    """Test - all capitals regex"""
-    from titlecase import ALL_CAPS
-    assert bool(ALL_CAPS.match('THIS IS ALL CAPS')) is True
 
 
 def test_initials_regex():
