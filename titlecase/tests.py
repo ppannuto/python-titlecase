@@ -304,6 +304,7 @@ def test_callback():
     assert titlecase(s) == 'A Simple Tcp and Udp Wrapper'
     assert titlecase(s, callback=abbreviation) == 'A Simple TCP and UDP Wrapper'
     assert titlecase(s.upper(), callback=abbreviation) == 'A Simple TCP and UDP Wrapper'
+    assert titlecase(u'crème brûlée', callback=lambda x, **kw: x.upper()) == u'CRÈME BRÛLÉE'
 
 
 def test_set_small_word_list():

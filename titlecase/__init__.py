@@ -29,11 +29,24 @@ UC_INITIALS = re.compile(r"^(?:[A-Z]{1}\.{1}|[A-Z]{1}\.{1}[A-Z]{1})+$")
 MAC_MC = re.compile(r"^([Mm]c|MC)(\w.+)")
 
 
-class ImmutableString(str):
+class Immutable(object):
+    pass
+
+
+text_type = unicode if sys.version_info < (3,) else str
+
+
+class ImmutableString(text_type, Immutable):
+    pass
+
+
+class ImmutableBytes(bytes, Immutable):
     pass
 
 
 def _mark_immutable(text):
+    if isinstance(text, bytes):
+        return ImmutableBytes(text)
     return ImmutableString(text)
 
 
@@ -124,13 +137,13 @@ def titlecase(text, callback=None, small_first_last=True):
             tc_line.append(CAPFIRST.sub(lambda m: m.group(0).upper(), word))
 
         if small_first_last and tc_line:
-            if not isinstance(tc_line[0], ImmutableString):
+            if not isinstance(tc_line[0], Immutable):
                 tc_line[0] = SMALL_FIRST.sub(lambda m: '%s%s' % (
                     m.group(1),
                     m.group(2).capitalize()
                 ), tc_line[0])
 
-            if not isinstance(tc_line[-1], ImmutableString):
+            if not isinstance(tc_line[-1], Immutable):
                 tc_line[-1] = SMALL_LAST.sub(
                     lambda m: m.group(0).capitalize(), tc_line[-1]
                 )
