@@ -3,7 +3,7 @@
 
 """Tests for titlecase"""
 
-from __future__ import print_function
+from __future__ import print_function, unicode_literals
 
 import os
 import sys
@@ -251,6 +251,14 @@ TEST_DATA = (
     (
         "mcfoo-bar, MCFOO-BAR, McFoo-bar, McFoo-Bar, mcfoo-mcbar, foo-mcbar",
         "McFoo-Bar, McFoo-Bar, McFoo-Bar, McFoo-Bar, McFoo-McBar, Foo-McBar",
+    ),
+    (
+        "'QUOTE' A GREAT",
+        "'Quote' a Great",
+    ),
+    (
+        "‘QUOTE’ A GREAT",
+        "‘Quote’ a Great",
     )
 )
 
