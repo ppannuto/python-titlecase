@@ -7,6 +7,8 @@ Python version by Stuart Colville http://muffinresearch.co.uk
 License: http://www.opensource.org/licenses/mit-license.php
 """
 
+from __future__ import unicode_literals
+
 import argparse
 import re
 import sys
