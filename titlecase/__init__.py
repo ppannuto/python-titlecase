@@ -14,7 +14,7 @@ import re
 import sys
 
 __all__ = ['titlecase']
-__version__ = '0.11.0'
+__version__ = '0.12.0'
 
 SMALL = 'a|an|and|as|at|but|by|en|for|if|in|of|on|or|the|to|v\.?|via|vs\.?'
 PUNCT = r"""!"#$%&'‘()*+,\-–‒—―./:;?@[\\\]_`{|}~"""
