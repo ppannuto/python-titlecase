@@ -259,7 +259,11 @@ TEST_DATA = (
     (
         "‘QUOTE’ A GREAT",
         "‘Quote’ a Great",
-    )
+    ),
+    (
+        "“YOUNG AND RESTLESS”",
+        "“Young and Restless”",
+    ),
 )
 
 
