@@ -62,14 +62,15 @@ def set_small_word_list(small=SMALL):
     SUBPHRASE = regex.compile(r'([:.;?!][ ])(%s)' % small)
 
 
-def retrieve_default_abbreviations():
+def retrieve_abbreviations(path_to_config=None):
     """
     This function checks for a default list of abbreviations which need to 
     remain as they are (e.g. uppercase only or mixed case).
     The file is retrieved from ~/.titlecase.txt (platform independent)
     """
     logger = logging.getLogger(__name__)
-    path_to_config = pathlib.Path.home() / ".titlecase.txt"
+    if path_to_config is None:
+        path_to_config = pathlib.Path.home() / ".titlecase.txt"
     if not os.path.isfile(path_to_config):
         logger.debug('No config file found at ' + str(path_to_config))
         return lambda word, **kwargs : None
@@ -239,4 +240,4 @@ def cmd():
             in_string = ifile.read()
 
     with ofile:
-        ofile.write(titlecase(in_string, callback=retrieve_default_abbreviations()))
+        ofile.write(titlecase(in_string, callback=retrieve_abbreviations()))
