@@ -72,3 +72,18 @@ Titlecase also provides a command line utility ``titlecase``:
     # Or read/write files:
     $ titlecase -f infile -o outfile
 
+
+Limitations
+-----------
+
+This is a best-effort library that uses regexes to try to do intelligent
+things, but will have limitations. For example, it does not have the contextual
+awareness to distinguish acronyms from words: us (we) versus US (United States).
+
+The regexes and titlecasing rules were written for American English. While
+there is basic support for Unicode characters, such that something like
+"El Niño" will work, it is likely that accents or non-English phrases will
+not be handled correctly.
+
+If anyone has concrete solutions to improve these or other shortcomings of the
+libraries, pull requests a very welcome!

@@ -10,8 +10,9 @@ License: http://www.opensource.org/licenses/mit-license.php
 from __future__ import unicode_literals
 
 import argparse
-import re
 import sys
+
+import regex
 
 __all__ = ['titlecase']
 __version__ = '0.12.0'
@@ -19,16 +20,16 @@ __version__ = '0.12.0'
 SMALL = r'a|an|and|as|at|but|by|en|for|if|in|of|on|or|the|to|v\.?|via|vs\.?'
 PUNCT = r"""!"“#$%&'‘()*+,\-–‒—―./:;?@[\\\]_`{|}~"""
 
-SMALL_WORDS = re.compile(r'^(%s)$' % SMALL, re.I)
-INLINE_PERIOD = re.compile(r'[a-z][.][a-z]', re.I)
-UC_ELSEWHERE = re.compile(r'[%s]*?[a-zA-Z]+[A-Z]+?' % PUNCT)
-CAPFIRST = re.compile(r"^[%s]*?([A-Za-z])" % PUNCT)
-SMALL_FIRST = re.compile(r'^([%s]*)(%s)\b' % (PUNCT, SMALL), re.I)
-SMALL_LAST = re.compile(r'\b(%s)[%s]?$' % (SMALL, PUNCT), re.I)
-SUBPHRASE = re.compile(r'([:.;?!\-–‒—―][ ])(%s)' % SMALL)
-APOS_SECOND = re.compile(r"^[dol]{1}['‘]{1}[a-z]+(?:['s]{2})?$", re.I)
-UC_INITIALS = re.compile(r"^(?:[A-Z]{1}\.{1}|[A-Z]{1}\.{1}[A-Z]{1})+$")
-MAC_MC = re.compile(r"^([Mm]c|MC)(\w.+)")
+SMALL_WORDS = regex.compile(r'^(%s)$' % SMALL, regex.I)
+INLINE_PERIOD = regex.compile(r'[\p{Letter}][.][\p{Letter}]', regex.I)
+UC_ELSEWHERE = regex.compile(r'[%s]*?[\p{Letter}]+[\p{Uppercase_Letter}]+?' % PUNCT)
+CAPFIRST = regex.compile(r"^[%s]*?([\p{Letter}])" % PUNCT)
+SMALL_FIRST = regex.compile(r'^([%s]*)(%s)\b' % (PUNCT, SMALL), regex.I)
+SMALL_LAST = regex.compile(r'\b(%s)[%s]?$' % (SMALL, PUNCT), regex.I)
+SUBPHRASE = regex.compile(r'([:.;?!\-–‒—―][ ])(%s)' % SMALL)
+APOS_SECOND = regex.compile(r"^[dol]{1}['‘]{1}[\p{Letter}]+(?:['s]{2})?$", regex.I)
+UC_INITIALS = regex.compile(r"^(?:[\p{Uppercase_Letter}]{1}\.{1}|[\p{Uppercase_Letter}]{1}\.{1}[\p{Uppercase_Letter}]{1})+$")
+MAC_MC = regex.compile(r"^([Mm]c|MC)(\w.+)")
 
 
 class Immutable(object):
@@ -57,10 +58,10 @@ def set_small_word_list(small=SMALL):
     global SMALL_FIRST
     global SMALL_LAST
     global SUBPHRASE
-    SMALL_WORDS = re.compile(r'^(%s)$' % small, re.I)
-    SMALL_FIRST = re.compile(r'^([%s]*)(%s)\b' % (PUNCT, small), re.I)
-    SMALL_LAST = re.compile(r'\b(%s)[%s]?$' % (small, PUNCT), re.I)
-    SUBPHRASE = re.compile(r'([:.;?!][ ])(%s)' % small)
+    SMALL_WORDS = regex.compile(r'^(%s)$' % small, regex.I)
+    SMALL_FIRST = regex.compile(r'^([%s]*)(%s)\b' % (PUNCT, small), regex.I)
+    SMALL_LAST = regex.compile(r'\b(%s)[%s]?$' % (small, PUNCT), regex.I)
+    SUBPHRASE = regex.compile(r'([:.;?!][ ])(%s)' % small)
 
 
 def titlecase(text, callback=None, small_first_last=True):
@@ -75,11 +76,11 @@ def titlecase(text, callback=None, small_first_last=True):
 
     """
 
-    lines = re.split('[\r\n]+', text)
+    lines = regex.split('[\r\n]+', text)
     processed = []
     for line in lines:
         all_caps = line.upper() == line
-        words = re.split('[\t ]', line)
+        words = regex.split('[\t ]', line)
         tc_line = []
         for word in words:
             if callback:
