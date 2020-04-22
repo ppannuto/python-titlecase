@@ -214,6 +214,8 @@ def cmd():
             help='File to read from to titlecase')
     parser.add_argument('-o', '--output-file',
             help='File to write titlecased output to')
+    parser.add_argument('-w', '--wordlist',
+            help='Wordlist for acronyms')
 
     args = parser.parse_args()
 
@@ -240,4 +242,7 @@ def cmd():
             in_string = ifile.read()
 
     with ofile:
-        ofile.write(titlecase(in_string, callback=retrieve_abbreviations()))
+        if args.wordlist is None:
+            ofile.write(titlecase(in_string, callback=retrieve_abbreviations()))
+        else:
+            ofile.write(titlecase(in_string, callback=retrieve_abbreviations(args.wordlist)))
