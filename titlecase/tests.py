@@ -264,6 +264,10 @@ TEST_DATA = (
         "“YOUNG AND RESTLESS”",
         "“Young and Restless”",
     ),
+    (
+        "EL NIÑO A ARRIVÉ HIER",
+        "El Niño a Arrivé Hier",
+    ),
 )
 
 
