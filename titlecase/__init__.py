@@ -176,7 +176,7 @@ def cmd():
     in_group.add_argument('-f', '--input-file',
             help='File to read from to titlecase')
     parser.add_argument('-o', '--output-file',
-            help='File to write titlecased output to)')
+            help='File to write titlecased output to')
 
     args = parser.parse_args()
 
