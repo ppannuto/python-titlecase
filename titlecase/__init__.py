@@ -10,6 +10,9 @@ License: http://www.opensource.org/licenses/mit-license.php
 import argparse
 import string
 import sys
+import os
+import pathlib
+import logging
 
 import regex
 
@@ -56,6 +59,27 @@ def set_small_word_list(small=SMALL):
     SMALL_FIRST = regex.compile(r'^([%s]*)(%s)\b' % (PUNCT, small), regex.I)
     SMALL_LAST = regex.compile(r'\b(%s)[%s]?$' % (small, PUNCT), regex.I)
     SUBPHRASE = regex.compile(r'([:.;?!][ ])(%s)' % small)
+
+
+def retrieve_default_abbreviations():
+    """
+    This function checks for a default list of abbreviations which need to 
+    remain as they are (e.g. uppercase only or mixed case).
+    The file is retrieved from ~/.titlecase.txt (platform independent)
+    """
+    logger = logging.getLogger(__name__)
+    path_to_config = pathlib.Path.home() / ".titlecase.txt"
+    if not os.path.isfile(path_to_config):
+        logger.debug('No config file found at ' + str(path_to_config))
+        return lambda word, **kwargs : None
+    with open(str(path_to_config)) as f:
+        logger.debug('Config file used from ' + str(path_to_config))
+        abbreviations = [abbr.strip() for abbr in f.read().splitlines() if abbr]
+        abbreviations_capitalized = [abbr.upper() for abbr in abbreviations]
+        for abbr in abbreviations:
+            logging.debug("This acronym will be kept as written here: " + abbr)
+        return lambda word, **kwargs : (abbreviations[abbreviations_capitalized.index(word.upper())]
+                                       if word.upper() in abbreviations_capitalized else None)
 
 
 def titlecase(text, callback=None, small_first_last=True):
@@ -214,4 +238,4 @@ def cmd():
             in_string = ifile.read()
 
     with ofile:
-        ofile.write(titlecase(in_string))
+        ofile.write(titlecase(in_string, callback=retrieve_default_abbreviations()))
