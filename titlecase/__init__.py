@@ -9,6 +9,7 @@ License: http://www.opensource.org/licenses/mit-license.php
 
 import argparse
 import logging
+logger = logging.getLogger(__name__)
 import os
 import pathlib
 import re
@@ -62,13 +63,12 @@ def set_small_word_list(small=SMALL):
     SUBPHRASE = regex.compile(r'([:.;?!][ ])(%s)' % small)
 
 
-def retrieve_abbreviations(path_to_config=None):
+def create_wordlist_filter(path_to_config=None):
     """
     This function checks for a default list of abbreviations which need to 
     remain as they are (e.g. uppercase only or mixed case).
     The file is retrieved from ~/.titlecase.txt (platform independent)
     """
-    logger = logging.getLogger(__name__)
     if path_to_config is None:
         path_to_config = pathlib.Path.home() / ".titlecase.txt"
     if not os.path.isfile(path_to_config):
@@ -79,12 +79,12 @@ def retrieve_abbreviations(path_to_config=None):
         abbreviations = [abbr.strip() for abbr in f.read().splitlines() if abbr]
         abbreviations_capitalized = [abbr.upper() for abbr in abbreviations]
         for abbr in abbreviations:
-            logging.debug("This acronym will be kept as written here: " + abbr)
+            logger.debug("This acronym will be kept as written here: " + abbr)
         return lambda word, **kwargs : (abbreviations[abbreviations_capitalized.index(word.upper())]
                                        if word.upper() in abbreviations_capitalized else None)
 
 
-def titlecase(text, callback=None, small_first_last=True):
+def titlecase(text, callback=None, small_first_last=True, wordlist_file=None):
     """
     :param text: Titlecases input text
     :param callback: Callback function that returns the titlecase version of a specific word
@@ -100,6 +100,7 @@ def titlecase(text, callback=None, small_first_last=True):
     the New York Times Manual of Style, plus 'vs' and 'v'.
 
     """
+    wordlist_filter = create_wordlist_filter(wordlist_file)
 
     lines = regex.split('[\r\n]+', text)
     processed = []
@@ -115,6 +116,12 @@ def titlecase(text, callback=None, small_first_last=True):
                     # specific, leave this string alone from now on
                     tc_line.append(_mark_immutable(new_word))
                     continue
+
+            # If the user has a custom wordlist, defer to that
+            new_word = wordlist_filter(word, all_caps=all_caps)
+            if new_word:
+                tc_line.append(_mark_immutable(new_word))
+                continue
 
             if all_caps:
                 if UC_INITIALS.match(word):
@@ -196,7 +203,9 @@ def titlecase(text, callback=None, small_first_last=True):
 
         processed.append(result)
 
-    return "\n".join(processed)
+    result = "\n".join(processed)
+    logger.debug(result)
+    return result
 
 
 def cmd():
@@ -242,7 +251,4 @@ def cmd():
             in_string = ifile.read()
 
     with ofile:
-        if args.wordlist is None:
-            ofile.write(titlecase(in_string, callback=retrieve_abbreviations()))
-        else:
-            ofile.write(titlecase(in_string, callback=retrieve_abbreviations(args.wordlist)))
+        ofile.write(titlecase(in_string, wordlist_file=args.wordlist))
