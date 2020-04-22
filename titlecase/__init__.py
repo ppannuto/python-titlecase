@@ -8,11 +8,12 @@ License: http://www.opensource.org/licenses/mit-license.php
 """
 
 import argparse
-import string
-import sys
+import logging
 import os
 import pathlib
-import logging
+import re
+import string
+import sys
 
 import regex
 
