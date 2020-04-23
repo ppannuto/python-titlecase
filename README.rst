@@ -6,13 +6,21 @@ Titlecase
 .. image:: https://coveralls.io/repos/github/ppannuto/python-titlecase/badge.svg?branch=master
     :target: https://coveralls.io/github/ppannuto/python-titlecase?branch=master
 
-This filter changes all words to Title Caps, and attempts to be clever
+This filter changes a given text to Title Caps, and attempts to be clever
 about SMALL words like a/an/the in the input.
-
 The list of "SMALL words" which are not capped comes from the New York
 Times Manual of Style, plus some others like 'vs' and 'v'.
 
-This is a resurrection of `Stuart Colville's
+The filter employs some heuristics to guess abbreviations that don't need conversion.
+
+
+| Original         | Conversion     |
+| ---------------- | -------------- |
+| this is a test   | This Is a Test |
+| THIS IS A TEST   | This Is a Test |
+| this is a TEST   | This Is a TEST |
+
+This library is a resurrection of `Stuart Colville's
 titlecase.py <https://muffinresearch.co.uk/titlecasepy-titlecase-in-python/>`__,
 which was in turn a port of `John Gruber's
 titlecase.pl <http://daringfireball.net/2008/05/title_case>`__.
