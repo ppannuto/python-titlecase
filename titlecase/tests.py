@@ -264,6 +264,26 @@ TEST_DATA = (
         "“YOUNG AND RESTLESS”",
         "“Young and Restless”",
     ),
+    (
+        "EL NIÑO A ARRIVÉ HIER",
+        "El Niño a Arrivé Hier",
+    ),
+    (
+        "YEA NO",
+        "Yea No",
+    ),
+    (
+        "ÝÆ ÑØ",
+        "Ýæ Ñø",
+    ),
+    (
+        "yea no",
+        "Yea No",
+    ),
+    (
+        "ýæ ñø",
+        "Ýæ Ñø",
+    ),
 )
 
 
