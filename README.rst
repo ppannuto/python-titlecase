@@ -13,12 +13,16 @@ Times Manual of Style, plus some others like 'vs' and 'v'.
 
 The filter employs some heuristics to guess abbreviations that don't need conversion.
 
-
++------------------+----------------+
 | Original         | Conversion     |
-| ---------------- | -------------- |
++==================+================+
 | this is a test   | This Is a Test |
++------------------+----------------+
 | THIS IS A TEST   | This Is a Test |
++------------------+----------------+
 | this is a TEST   | This Is a TEST |
++------------------+----------------+
+
 
 This library is a resurrection of `Stuart Colville's
 titlecase.py <https://muffinresearch.co.uk/titlecasepy-titlecase-in-python/>`__,
