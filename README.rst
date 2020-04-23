@@ -23,6 +23,8 @@ The filter employs some heuristics to guess abbreviations that don't need conver
 | this is a TEST   | This Is a TEST |
 +------------------+----------------+
 
+More examples and expected behavior for corner cases are available in the
+`package test suite <https://github.com/ppannuto/python-titlecase/blob/master/titlecase/tests.py>`__.
 
 This library is a resurrection of `Stuart Colville's
 titlecase.py <https://muffinresearch.co.uk/titlecasepy-titlecase-in-python/>`__,
