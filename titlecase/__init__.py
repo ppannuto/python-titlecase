@@ -10,6 +10,7 @@ License: http://www.opensource.org/licenses/mit-license.php
 from __future__ import unicode_literals
 
 import argparse
+import string
 import sys
 
 import regex
@@ -135,6 +136,17 @@ def titlecase(text, callback=None, small_first_last=True):
 
             if all_caps:
                 word = word.lower()
+
+
+            # A term with all consonants should be considered an acronym.  But if it's
+            # too short (like "St", don't apply this)
+            CONSONANTS = ''.join(set(string.ascii_lowercase)
+                                 - {'a', 'e', 'i', 'o', 'u', 'y'})
+            is_all_consonants = regex.search('\A[' + CONSONANTS + ']+\Z', word,
+                                             flags=regex.IGNORECASE)
+            if is_all_consonants and len(word) > 2:
+                tc_line.append(word.upper())
+                continue
 
             # Just a normal word that needs to be capitalized
             tc_line.append(CAPFIRST.sub(lambda m: m.group(0).upper(), word))

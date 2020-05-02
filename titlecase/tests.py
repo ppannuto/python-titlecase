@@ -11,6 +11,8 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../'))
 
 from titlecase import titlecase, set_small_word_list
 
+
+# (executed by `test_input_output` below)
 TEST_DATA = (
     (
         "",
@@ -43,6 +45,10 @@ TEST_DATA = (
     (
         "Apple deal with AT&T falls through",
         "Apple Deal With AT&T Falls Through"
+    ),
+    (
+        "Words with all consonants like cnn are acronyms",
+        "Words With All Consonants Like CNN Are Acronyms"
     ),
     (
         "this v that",
@@ -333,7 +339,9 @@ def test_callback():
         if word.upper() in ('TCP', 'UDP'):
             return word.upper()
     s = 'a simple tcp and udp wrapper'
-    assert titlecase(s) == 'A Simple Tcp and Udp Wrapper'
+    # Note: this library is able to guess that all-consonant words are acronyms, so TCP
+    # works naturally, but others will require the custom list
+    assert titlecase(s) == 'A Simple TCP and Udp Wrapper'
     assert titlecase(s, callback=abbreviation) == 'A Simple TCP and UDP Wrapper'
     assert titlecase(s.upper(), callback=abbreviation) == 'A Simple TCP and UDP Wrapper'
     assert titlecase(u'crème brûlée', callback=lambda x, **kw: x.upper()) == u'CRÈME BRÛLÉE'
