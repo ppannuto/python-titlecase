@@ -3,16 +3,22 @@ import sys
 
 from setuptools import setup, find_packages
 
-def readme():
-    with open('README.rst') as f:
+def read_file(path):
+    with open(path) as f:
         return f.read()
 
-from titlecase import __version__
+def read_version(path):
+    for line in read_file(path).splitlines():
+        if line.startswith('__version__'):
+            delim = '"' if '"' in line else "'"
+            return line.split(delim)[1]
+    else:
+        raise RuntimeError('No version string found')
 
 setup(name='titlecase',
-    version=__version__,
+    version=read_version('titlecase/__init__.py'),
     description="Python Port of John Gruber's titlecase.pl",
-    long_description=readme(),
+    long_description=read_file('README.rst'),
     classifiers=[
         "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
