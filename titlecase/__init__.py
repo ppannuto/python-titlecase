@@ -7,8 +7,6 @@ Python version by Stuart Colville http://muffinresearch.co.uk
 License: http://www.opensource.org/licenses/mit-license.php
 """
 
-from __future__ import unicode_literals
-
 import argparse
 import string
 import sys
@@ -36,13 +34,8 @@ MAC_MC = regex.compile(r"^([Mm]c|MC)(\w.+)")
 class Immutable(object):
     pass
 
-
-text_type = unicode if sys.version_info < (3,) else str
-
-
-class ImmutableString(text_type, Immutable):
+class ImmutableString(str, Immutable):
     pass
-
 
 class ImmutableBytes(bytes, Immutable):
     pass
