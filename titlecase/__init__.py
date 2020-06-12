@@ -71,7 +71,7 @@ def create_wordlist_filter(path_to_config=None):
     """
     if path_to_config is None:
         path_to_config = pathlib.Path.home() / ".titlecase.txt"
-    if not os.path.isfile(path_to_config):
+    if not os.path.isfile(str(path_to_config)):
         logger.debug('No config file found at ' + str(path_to_config))
         return lambda word, **kwargs : None
     with open(str(path_to_config)) as f:
