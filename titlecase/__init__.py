@@ -62,28 +62,7 @@ def set_small_word_list(small=SMALL):
     SUBPHRASE = regex.compile(r'([:.;?!][ ])(%s)' % small)
 
 
-def create_wordlist_filter(path_to_config=None):
-    """
-    This function checks for a default list of abbreviations which need to 
-    remain as they are (e.g. uppercase only or mixed case).
-    The file is retrieved from ~/.titlecase.txt (platform independent)
-    """
-    if path_to_config is None:
-        path_to_config = os.path.join(os.path.expanduser('~'), ".titlecase.txt")
-    if not os.path.isfile(str(path_to_config)):
-        logger.debug('No config file found at ' + str(path_to_config))
-        return lambda word, **kwargs : None
-    with open(str(path_to_config)) as f:
-        logger.debug('Config file used from ' + str(path_to_config))
-        abbreviations = [abbr.strip() for abbr in f.read().splitlines() if abbr]
-        abbreviations_capitalized = [abbr.upper() for abbr in abbreviations]
-        for abbr in abbreviations:
-            logger.debug("This acronym will be kept as written here: " + abbr)
-        return lambda word, **kwargs : (abbreviations[abbreviations_capitalized.index(word.upper())]
-                                       if word.upper() in abbreviations_capitalized else None)
-
-
-def titlecase(text, callback=None, small_first_last=True, wordlist_file=None):
+def titlecase(text, callback=None, small_first_last=True):
     """
     :param text: Titlecases input text
     :param callback: Callback function that returns the titlecase version of a specific word
@@ -99,8 +78,6 @@ def titlecase(text, callback=None, small_first_last=True, wordlist_file=None):
     the New York Times Manual of Style, plus 'vs' and 'v'.
 
     """
-    wordlist_filter = create_wordlist_filter(wordlist_file)
-
     lines = regex.split('[\r\n]+', text)
     processed = []
     for line in lines:
@@ -115,12 +92,6 @@ def titlecase(text, callback=None, small_first_last=True, wordlist_file=None):
                     # specific, leave this string alone from now on
                     tc_line.append(_mark_immutable(new_word))
                     continue
-
-            # If the user has a custom wordlist, defer to that
-            new_word = wordlist_filter(word, all_caps=all_caps)
-            if new_word:
-                tc_line.append(_mark_immutable(new_word))
-                continue
 
             if all_caps:
                 if UC_INITIALS.match(word):
@@ -207,6 +178,27 @@ def titlecase(text, callback=None, small_first_last=True, wordlist_file=None):
     return result
 
 
+def create_wordlist_filter(path_to_config=None):
+    """
+    This function reads the file with the given path to check for
+    a default list of abbreviations which need to remain as they are
+    (e.g. uppercase only or mixed case).
+    """
+    if path_to_config is None:
+        return lambda word, **kwargs : None
+    if not os.path.isfile(str(path_to_config)):
+        logger.debug('No config file found at ' + str(path_to_config))
+        return lambda word, **kwargs : None
+    with open(str(path_to_config)) as f:
+        logger.debug('Config file used from ' + str(path_to_config))
+        abbreviations = [abbr.strip() for abbr in f.read().splitlines() if abbr]
+        abbreviations_capitalized = [abbr.upper() for abbr in abbreviations]
+        for abbr in abbreviations:
+            logger.debug("This acronym will be kept as written here: " + abbr)
+        return lambda word, **kwargs : (abbreviations[abbreviations_capitalized.index(word.upper())]
+                                       if word.upper() in abbreviations_capitalized else None)
+
+
 def cmd():
     '''Handler for command line invocation'''
 
@@ -249,5 +241,11 @@ def cmd():
         with ifile:
             in_string = ifile.read()
 
+    if args.wordlist is not None:
+        wordlist_file = args.wordlist
+    else:
+        wordlist_file = os.path.join(os.path.expanduser('~'), '.titlecase.txt')
+    wordlist_filter = create_wordlist_filter(wordlist_file)
+
     with ofile:
-        ofile.write(titlecase(in_string, wordlist_file=args.wordlist))
+        ofile.write(titlecase(in_string, callback=wordlist_filter))
