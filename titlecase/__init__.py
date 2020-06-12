@@ -11,7 +11,6 @@ import argparse
 import logging
 logger = logging.getLogger(__name__)
 import os
-import pathlib
 import re
 import string
 import sys
@@ -70,7 +69,7 @@ def create_wordlist_filter(path_to_config=None):
     The file is retrieved from ~/.titlecase.txt (platform independent)
     """
     if path_to_config is None:
-        path_to_config = pathlib.Path.home() / ".titlecase.txt"
+        path_to_config = os.path.join(os.path.expanduser('~'), ".titlecase.txt")
     if not os.path.isfile(str(path_to_config)):
         logger.debug('No config file found at ' + str(path_to_config))
         return lambda word, **kwargs : None
