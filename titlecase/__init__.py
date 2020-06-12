@@ -68,7 +68,7 @@ def titlecase(text, callback=None, small_first_last=True):
     """
     :param text: Titlecases input text
     :param callback: Callback function that returns the titlecase version of a specific word
-    :param small_first_last: ???
+    :param small_first_last: Capitalize small words (e.g. 'A') at the beginning; disabled when recursing
     :type text: str
     :type callback: function
     :type small_first_last: bool
