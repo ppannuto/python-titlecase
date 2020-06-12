@@ -7,6 +7,7 @@ from __future__ import print_function, unicode_literals
 
 import os
 import sys
+import tempfile
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../'))
 
 from titlecase import titlecase, set_small_word_list
@@ -351,6 +352,18 @@ def test_set_small_word_list():
     assert titlecase('playing the game "words with friends"') == 'Playing the Game "Words With Friends"'
     set_small_word_list('a|an|the|with')
     assert titlecase('playing the game "words with friends"') == 'Playing the Game "Words with Friends"'
+
+
+def test_custom_abbreviations():
+    with tempfile.NamedTemporaryFile(mode='w') as f:
+        f.write('UDP\nPPPoE\n')
+        f.flush()
+        # This works without a wordlist, because it begins mixed case
+        assert titlecase('sending UDP packets over PPPoE works great') == 'Sending UDP Packets Over PPPoE Works Great'
+        # Without a wordlist, this will do the "wrong" thing for the context
+        assert titlecase('SENDING UDP PACKETS OVER PPPOE WORKS GREAT') == 'Sending Udp Packets Over Pppoe Works Great'
+        # A wordlist can provide custom acronyms
+        assert titlecase('sending UDP packets over PPPoE works great', wordlist_file=f.name) == 'Sending UDP Packets Over PPPoE Works Great'
 
 
 if __name__ == "__main__":

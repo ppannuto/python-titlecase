@@ -77,7 +77,7 @@ Command Line Usage
 
 Titlecase also provides a command line utility ``titlecase``:
 
-.. code-block:: python
+::
 
     $ titlecase make me a title
     Make Me a Title
@@ -85,6 +85,17 @@ Titlecase also provides a command line utility ``titlecase``:
     Can Pipe and/or Whatever Else
     # Or read/write files:
     $ titlecase -f infile -o outfile
+
+In addition, commonly used acronyms can be kept in a local file
+at `~/.titlecase.txt`. This file contains one acronym per line.
+The acronym will be maintained in the title as it is provided.
+Once there is e.g. one line saying `TCP`, then it will be automatically
+used when used from the command line.
+
+::
+
+    $ titlecase I LOVE TCP
+    I Love TCP
 
 
 Limitations
@@ -100,4 +111,4 @@ there is basic support for Unicode characters, such that something like
 not be handled correctly.
 
 If anyone has concrete solutions to improve these or other shortcomings of the
-libraries, pull requests are very welcome!
+library, pull requests are very welcome!
