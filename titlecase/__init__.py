@@ -67,7 +67,12 @@ def set_small_word_list(small=SMALL):
 
 def titlecase(text, callback=None, small_first_last=True):
     """
-    Titlecases input text
+    :param text: Titlecases input text
+    :param callback: Callback function that returns the titlecase version of a specific word
+    :param small_first_last: Capitalize small words (e.g. 'A') at the beginning; disabled when recursing
+    :type text: str
+    :type callback: function
+    :type small_first_last: bool
 
     This filter changes all words to Title Caps, and attempts to be clever
     about *un*capitalizing SMALL words like a/an/the in the input.
@@ -108,7 +113,7 @@ def titlecase(text, callback=None, small_first_last=True):
             match = MAC_MC.match(word)
             if match:
                 tc_line.append("%s%s" % (match.group(1).capitalize(),
-                                         titlecase(match.group(2),callback,small_first_last)))
+                                         titlecase(match.group(2), callback, small_first_last)))
                 continue
 
             if INLINE_PERIOD.search(word) or (not all_caps and UC_ELSEWHERE.match(word)):
@@ -128,7 +133,7 @@ def titlecase(text, callback=None, small_first_last=True):
 
             if '-' in word:
                 hyphenated = map(
-                    lambda t: titlecase(t,callback,small_first_last),
+                    lambda t: titlecase(t, callback, small_first_last),
                     word.split('-')
                 )
                 tc_line.append("-".join(hyphenated))
