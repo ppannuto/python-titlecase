@@ -16,7 +16,7 @@ import sys
 import regex
 
 __all__ = ['titlecase']
-__version__ = '0.13.0'
+__version__ = '1.0.0'
 
 SMALL = r'a|an|and|as|at|but|by|en|for|if|in|of|on|or|the|to|v\.?|via|vs\.?'
 PUNCT = r"""!"“#$%&'‘()*+,\-–‒—―./:;?@[\\\]_`{|}~"""
