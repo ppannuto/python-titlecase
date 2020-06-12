@@ -64,12 +64,12 @@ def set_small_word_list(small=SMALL):
 
 def create_wordlist_filter(path_to_config=None):
     """
-    This function checks for a default list of abbreviations which need to 
-    remain as they are (e.g. uppercase only or mixed case).
-    The file is retrieved from ~/.titlecase.txt (platform independent)
+    This function reads the file with the given path to check for
+    a default list of abbreviations which need to remain as they are
+    (e.g. uppercase only or mixed case).
     """
     if path_to_config is None:
-        path_to_config = os.path.join(os.path.expanduser('~'), ".titlecase.txt")
+        return lambda word, **kwargs : None
     if not os.path.isfile(str(path_to_config)):
         logger.debug('No config file found at ' + str(path_to_config))
         return lambda word, **kwargs : None
@@ -249,5 +249,10 @@ def cmd():
         with ifile:
             in_string = ifile.read()
 
+    if args.wordlist is not None:
+        wordlist_file = args.wordlist
+    else:
+        wordlist_file = os.path.join(os.path.expanduser('~'), '.titlecase.txt')
+
     with ofile:
-        ofile.write(titlecase(in_string, wordlist_file=args.wordlist))
+        ofile.write(titlecase(in_string, wordlist_file=wordlist_file))
