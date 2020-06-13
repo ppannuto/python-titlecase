@@ -178,25 +178,28 @@ def titlecase(text, callback=None, small_first_last=True):
     return result
 
 
-def create_wordlist_filter(path_to_config=None):
-    """
-    This function reads the file with the given path to check for
-    a default list of abbreviations which need to remain as they are
-    (e.g. uppercase only or mixed case).
-    """
-    if path_to_config is None:
-        return lambda word, **kwargs : None
-    if not os.path.isfile(str(path_to_config)):
-        logger.debug('No config file found at ' + str(path_to_config))
-        return lambda word, **kwargs : None
-    with open(str(path_to_config)) as f:
-        logger.debug('Config file used from ' + str(path_to_config))
-        abbreviations = [abbr.strip() for abbr in f.read().splitlines() if abbr]
-        abbreviations_capitalized = [abbr.upper() for abbr in abbreviations]
-        for abbr in abbreviations:
-            logger.debug("This acronym will be kept as written here: " + abbr)
-        return lambda word, **kwargs : (abbreviations[abbreviations_capitalized.index(word.upper())]
-                                       if word.upper() in abbreviations_capitalized else None)
+def create_wordlist_filter_from_file(file_path):
+    '''
+    Load a list of abbreviations from the file with the provided path,
+    reading one abbreviation from each line, and return a callback to
+    be passed to the `titlecase` function for preserving their given
+    canonical capitalization during title-casing.
+    '''
+    if file_path is None:
+        logger.debug('No abbreviations file path given')
+        return lambda word, **kwargs: None
+    file_path_str = str(file_path)
+    if not os.path.isfile(file_path_str):
+        logger.debug('No abbreviations file found at ' + file_path_str)
+        return lambda word, **kwargs: None
+    with open(file_path_str) as f:
+        logger.debug('Reading abbreviations from file ' + file_path_str)
+        abbrevs_gen = (line.strip() for line in f.read().splitlines() if line)
+        abbrevs = {abbr.upper(): abbr for abbr in abbrevs_gen}
+        if logger.isEnabledFor(logging.DEBUG):
+            for abbr in abbrevs.values():
+                logger.debug('Registered abbreviation: ' + abbr)
+        return lambda word, **kwargs: abbrevs.get(word.upper())
 
 
 def cmd():
@@ -245,7 +248,7 @@ def cmd():
         wordlist_file = args.wordlist
     else:
         wordlist_file = os.path.join(os.path.expanduser('~'), '.titlecase.txt')
-    wordlist_filter = create_wordlist_filter(wordlist_file)
+    wordlist_filter = create_wordlist_filter_from_file(wordlist_file)
 
     with ofile:
         ofile.write(titlecase(in_string, callback=wordlist_filter))
