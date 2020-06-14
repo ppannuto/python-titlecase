@@ -129,7 +129,7 @@ def titlecase(text, callback=None, small_first_last=True):
 
             if '-' in word:
                 hyphenated = map(
-                    lambda t: titlecase(t, callback, small_first_last),
+                    lambda t: titlecase(t, callback, False),
                     word.split('-')
                 )
                 tc_line.append("-".join(hyphenated))
