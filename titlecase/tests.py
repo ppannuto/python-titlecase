@@ -251,6 +251,14 @@ TEST_DATA = (
         "o'melveny/o'doyle o'Melveny/o'doyle O'melveny/o'doyle o'melveny/o'Doyle o'melveny/O'doyle",
         "O'Melveny/O'Doyle O'Melveny/O'Doyle O'Melveny/O'Doyle O'Melveny/O'Doyle O'Melveny/O'Doyle",
     ),
+    # These 'Mc' cases aim to ensure more consistent/predictable behavior.
+    # The examples here are somewhat contrived, and are subject to change
+    # if there is a compelling argument for updating their behavior.
+    # See https://github.com/ppannuto/python-titlecase/issues/64
+    (
+        "mccay-mcbut-mcdo mcdonalds/mcby",
+        "McCay-McBut-McDo McDonalds/McBy"
+    ),
     (
         "oblon, spivak, mcclelland, maier & neustadt",
         "Oblon, Spivak, McClelland, Maier & Neustadt",

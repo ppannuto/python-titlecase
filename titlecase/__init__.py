@@ -109,7 +109,7 @@ def titlecase(text, callback=None, small_first_last=True):
             match = MAC_MC.match(word)
             if match:
                 tc_line.append("%s%s" % (match.group(1).capitalize(),
-                                         titlecase(match.group(2), callback, small_first_last)))
+                                         titlecase(match.group(2), callback, True)))
                 continue
 
             if INLINE_PERIOD.search(word) or (not all_caps and UC_ELSEWHERE.match(word)):
