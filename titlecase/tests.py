@@ -10,7 +10,7 @@ import sys
 import tempfile
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../'))
 
-from titlecase import titlecase, set_small_word_list
+from titlecase import titlecase, set_small_word_list, create_wordlist_filter_from_file
 
 
 # (executed by `test_input_output` below)
@@ -363,7 +363,7 @@ def test_custom_abbreviations():
         # Without a wordlist, this will do the "wrong" thing for the context
         assert titlecase('SENDING UDP PACKETS OVER PPPOE WORKS GREAT') == 'Sending Udp Packets Over Pppoe Works Great'
         # A wordlist can provide custom acronyms
-        assert titlecase('sending UDP packets over PPPoE works great', wordlist_file=f.name) == 'Sending UDP Packets Over PPPoE Works Great'
+        assert titlecase('sending UDP packets over PPPoE works great', callback=create_wordlist_filter_from_file(f.name)) == 'Sending UDP Packets Over PPPoE Works Great'
 
 
 if __name__ == "__main__":
