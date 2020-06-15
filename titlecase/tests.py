@@ -32,6 +32,10 @@ TEST_DATA = (
         "Dance With Me/Let’s Face the Music and Dance"
     ),
     (
+        "a-b end-to-end two-not-three/three-by-four/five-and",
+        "A-B End-to-End Two-Not-Three/Three-by-Four/Five-And"
+    ),
+    (
         "34th 3rd 2nd",
         "34th 3rd 2nd"
     ),
