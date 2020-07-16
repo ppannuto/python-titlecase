@@ -305,8 +305,8 @@ TEST_DATA = (
     ),
     # https://github.com/ppannuto/python-titlecase/pull/67
     (
-        "Mr mr Mrs Ms Mss , Mr. and Mrs. Person",
-        "Mr Mr Mrs Ms MSS , Mr. And Mrs. Person",
+        "Mr mr Mrs Ms Mss Dr dr , Mr. and Mrs. Person",
+        "Mr Mr Mrs Ms MSS Dr Dr , Mr. And Mrs. Person",
     ),
 )
 
