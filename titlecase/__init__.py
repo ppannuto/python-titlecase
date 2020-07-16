@@ -33,7 +33,7 @@ SUBPHRASE = regex.compile(r'([:.;?!\-–‒—―][ ])(%s)' % SMALL)
 APOS_SECOND = regex.compile(r"^[dol]{1}['‘]{1}[\p{Letter}]+(?:['s]{2})?$", regex.I)
 UC_INITIALS = regex.compile(r"^(?:[\p{Uppercase_Letter}]{1}\.{1}|[\p{Uppercase_Letter}]{1}\.{1}[\p{Uppercase_Letter}]{1})+$")
 MAC_MC = regex.compile(r"^([Mm]c|MC)(\w.+)")
-MR_MRS_MS = regex.compile(r"^(m((rs?)|s))$", regex.I)
+MR_MRS_MS_DR = regex.compile(r"^((m((rs?)|s))|Dr)$", regex.I)
 
 class Immutable(object):
     pass
@@ -112,7 +112,7 @@ def titlecase(text, callback=None, small_first_last=True):
                                          titlecase(match.group(2), callback, True)))
                 continue
 
-            match = MR_MRS_MS.match(word)
+            match = MR_MRS_MS_DR.match(word)
             if match:
                 word = word[0].upper() + word[1:]
                 tc_line.append(word)
