@@ -11,11 +11,13 @@ import argparse
 import logging
 logger = logging.getLogger(__name__)
 import os
-import re
 import string
 import sys
 
-import regex
+try:
+    import regex
+except ImportError:
+    import re as regex
 
 __all__ = ['titlecase']
 __version__ = '2.0.0'
