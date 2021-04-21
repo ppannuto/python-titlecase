@@ -6,7 +6,7 @@ from setuptools import setup, find_packages
 def read_file(rel_path):
     abs_dir_path = os.path.abspath(os.path.dirname(__file__))
     abs_path = os.path.join(abs_dir_path, rel_path)
-    with open(abs_path) as f:
+    with open(abs_path, encoding='UTF-8') as f:
         return f.read()
 
 def read_version(rel_path):
