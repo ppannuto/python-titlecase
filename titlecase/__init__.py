@@ -20,7 +20,7 @@ except ImportError:
     import re as regex
 
 __all__ = ['titlecase']
-__version__ = '2.0.0'
+__version__ = '2.1.0'
 
 SMALL = r'a|an|and|as|at|but|by|en|for|if|in|of|on|or|the|to|v\.?|via|vs\.?'
 PUNCT = r"""!"“#$%&'‘()*+,\-–‒—―./:;?@[\\\]_`{|}~"""
