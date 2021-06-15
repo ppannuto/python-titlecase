@@ -1,0 +1,30 @@
+name: test
+
+on: [push]
+
+jobs:
+  build-with-required-deps:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.9"
+      - name: Install non-optional and test dependencies
+        run: pip install tox coveralls nose
+      - name: Run Tox (required dependencies)
+        run: tox
+
+  build-with-optional-deps:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.9"
+      - name: Install all dependencies
+        run: pip install regex tox coveralls nose
+      - name: Run Tox
+        run: tox
