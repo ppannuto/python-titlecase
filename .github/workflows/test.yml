@@ -11,10 +11,12 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: "3.9"
-      - name: Install non-optional and test dependencies
-        run: pip install tox coveralls nose
-      - name: Run Tox (required dependencies)
-        run: tox
+      - name: Install
+        run: python setup.py install
+      - name: Run Tox with required dependencies
+        run: |
+          pip install tox coveralls nose
+          tox
 
   build-with-optional-deps:
     runs-on: ubuntu-latest
@@ -24,7 +26,11 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: "3.9"
-      - name: Install all dependencies
-        run: pip install regex tox coveralls nose
-      - name: Run Tox
-        run: tox
+      - name: Install with optional dependencies
+        run: |
+          pip install regex
+          python setup.py install
+      - name: Run Tox with optional dependencies
+        run: |
+          pip install tox coveralls nose
+          tox
