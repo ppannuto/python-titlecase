@@ -13,10 +13,10 @@ jobs:
           python-version: "3.9"
       - name: Install
         run: python setup.py install
-      - name: Run Tox with required dependencies
+      - name: Tests
         run: |
-          pip install tox coveralls nose
-          tox -e py
+          pip install nose
+          nosetests
 
   build-with-optional-deps:
     runs-on: ubuntu-latest
@@ -30,7 +30,7 @@ jobs:
         run: |
           pip install regex
           python setup.py install
-      - name: Run Tox with optional dependencies
+      - name: Tests
         run: |
-          pip install tox coveralls nose
-          tox -e py
+          pip install nose
+          nosetests
