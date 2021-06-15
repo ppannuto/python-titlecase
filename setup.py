@@ -46,9 +46,8 @@ setup(name='titlecase',
     packages=find_packages(),
     include_package_data=True,
     zip_safe=False,
-    tests_require=['nose>=1.0'],
-    extras_requires={'test': 'nose>=1.0',
-                     'regex': 'regex>=2020.4.4'},
+    extras_require={'test': 'nose>=1.0',
+                    'regex': 'regex>=2020.4.4'},
     test_suite="titlecase.tests",
     entry_points = {
         'console_scripts': [
