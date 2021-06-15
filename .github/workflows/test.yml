@@ -16,7 +16,7 @@ jobs:
       - name: Run Tox with required dependencies
         run: |
           pip install tox coveralls nose
-          tox
+          tox -e py
 
   build-with-optional-deps:
     runs-on: ubuntu-latest
@@ -33,4 +33,4 @@ jobs:
       - name: Run Tox with optional dependencies
         run: |
           pip install tox coveralls nose
-          tox
+          tox -e py
