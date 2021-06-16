@@ -18,9 +18,9 @@ try:
     import regex
 except ImportError:
     import re as regex
-    REGEX_AVAILABLE = True
-else:
     REGEX_AVAILABLE = False
+else:
+    REGEX_AVAILABLE = True
 
 __all__ = ['titlecase']
 __version__ = '2.1.0'
