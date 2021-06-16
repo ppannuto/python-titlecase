@@ -372,7 +372,7 @@ def test_set_small_word_list():
 
 
 def test_custom_abbreviations():
-    with tempfile.NamedTemporaryFile(mode='w') as f:
+    with tempfile.NamedTemporaryFile(mode='r+') as f:
         f.write('UDP\nPPPoE\n')
         f.flush()
         # This works without a wordlist, because it begins mixed case
@@ -380,7 +380,7 @@ def test_custom_abbreviations():
         # Without a wordlist, this will do the "wrong" thing for the context
         assert titlecase('SENDING UDP PACKETS OVER PPPOE WORKS GREAT') == 'Sending Udp Packets Over Pppoe Works Great'
         # A wordlist can provide custom acronyms
-        assert titlecase('sending UDP packets over PPPoE works great', callback=create_wordlist_filter_from_file(f.name)) == 'Sending UDP Packets Over PPPoE Works Great'
+        assert titlecase('sending UDP packets over PPPoE works great', callback=create_wordlist_filter_from_file(f)) == 'Sending UDP Packets Over PPPoE Works Great'
 
 
 if __name__ == "__main__":
