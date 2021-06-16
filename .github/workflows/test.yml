@@ -1,0 +1,36 @@
+name: test
+
+on: [push, pull_request]
+
+jobs:
+  build-with-required-deps:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.9"
+      - name: Install
+        run: python setup.py install
+      - name: Tests
+        run: |
+          pip install nose
+          nosetests
+
+  build-with-optional-deps:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.9"
+      - name: Install with optional dependencies
+        run: |
+          pip install regex
+          python setup.py install
+      - name: Tests
+        run: |
+          pip install nose
+          nosetests
