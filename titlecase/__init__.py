@@ -18,6 +18,9 @@ try:
     import regex
 except ImportError:
     import re as regex
+    REGEX_AVAILABLE = True
+else:
+    REGEX_AVAILABLE = False
 
 __all__ = ['titlecase']
 __version__ = '2.1.0'
@@ -26,16 +29,26 @@ SMALL = r'a|an|and|as|at|but|by|en|for|if|in|of|on|or|the|to|v\.?|via|vs\.?'
 PUNCT = r"""!"“#$%&'‘()*+,\-–‒—―./:;?@[\\\]_`{|}~"""
 
 SMALL_WORDS = regex.compile(r'^(%s)$' % SMALL, regex.I)
-INLINE_PERIOD = regex.compile(r'[\p{Letter}][.][\p{Letter}]', regex.I)
-UC_ELSEWHERE = regex.compile(r'[%s]*?[\p{Letter}]+[\p{Uppercase_Letter}]+?' % PUNCT)
-CAPFIRST = regex.compile(r"^[%s]*?([\p{Letter}])" % PUNCT)
+
 SMALL_FIRST = regex.compile(r'^([%s]*)(%s)\b' % (PUNCT, SMALL), regex.I)
 SMALL_LAST = regex.compile(r'\b(%s)[%s]?$' % (SMALL, PUNCT), regex.I)
 SUBPHRASE = regex.compile(r'([:.;?!\-–‒—―][ ])(%s)' % SMALL)
-APOS_SECOND = regex.compile(r"^[dol]{1}['‘]{1}[\p{Letter}]+(?:['s]{2})?$", regex.I)
-UC_INITIALS = regex.compile(r"^(?:[\p{Uppercase_Letter}]{1}\.{1}|[\p{Uppercase_Letter}]{1}\.{1}[\p{Uppercase_Letter}]{1})+$")
 MAC_MC = regex.compile(r"^([Mm]c|MC)(\w.+)")
 MR_MRS_MS_DR = regex.compile(r"^((m((rs?)|s))|Dr)$", regex.I)
+
+if REGEX_AVAILABLE:
+    INLINE_PERIOD = regex.compile(r'[\p{Letter}][.][\p{Letter}]', regex.I)
+    UC_ELSEWHERE = regex.compile(r'[%s]*?[\p{Letter}]+[\p{Uppercase_Letter}]+?' % PUNCT)
+    CAPFIRST = regex.compile(r"^[%s]*?([\p{Letter}])" % PUNCT)
+    APOS_SECOND = regex.compile(r"^[dol]{1}['‘]{1}[\p{Letter}]+(?:['s]{2})?$", regex.I)
+    UC_INITIALS = regex.compile(r"^(?:[\p{Uppercase_Letter}]{1}\.{1}|[\p{Uppercase_Letter}]{1}\.{1}[\p{Uppercase_Letter}]{1})+$")
+else:
+    INLINE_PERIOD = regex.compile(r'[\w][.][\w]', regex.I)
+    UC_ELSEWHERE = regex.compile(r'[%s]*?[a-zA-Z]+[A-Z]+?' % PUNCT)
+    CAPFIRST = regex.compile(r"^[%s]*?([\w])" % PUNCT)
+    APOS_SECOND = regex.compile(r"^[dol]['‘][\w]+(?:['s]{2})?$", regex.I)
+    UC_INITIALS = regex.compile(r"^(?:[A-Z]\.|[A-Z]\.[A-Z])+$")
+
 
 class Immutable(object):
     pass
@@ -196,18 +209,36 @@ def create_wordlist_filter_from_file(file_path):
     if file_path is None:
         logger.debug('No abbreviations file path given')
         return lambda word, **kwargs: None
-    file_path_str = str(file_path)
-    if not os.path.isfile(file_path_str):
-        logger.debug('No abbreviations file found at ' + file_path_str)
-        return lambda word, **kwargs: None
-    with open(file_path_str) as f:
-        logger.debug('Reading abbreviations from file ' + file_path_str)
-        abbrevs_gen = (line.strip() for line in f.read().splitlines() if line)
-        abbrevs = {abbr.upper(): abbr for abbr in abbrevs_gen}
-        if logger.isEnabledFor(logging.DEBUG):
-            for abbr in abbrevs.values():
-                logger.debug('Registered abbreviation: ' + abbr)
-        return lambda word, **kwargs: abbrevs.get(word.upper())
+    if REGEX_AVAILABLE:
+        file_path_str = str(file_path)
+        if not os.path.isfile(file_path_str):
+            logger.debug('No abbreviations file found at ' + file_path_str)
+            return lambda word, **kwargs: None
+        with open(file_path_str) as f:
+            logger.debug('Reading abbreviations from file ' + file_path_str)
+            abbrevs_gen = (line.strip() for line in f.read().splitlines() if line)
+            abbrevs = {abbr.upper(): abbr for abbr in abbrevs_gen}
+            if logger.isEnabledFor(logging.DEBUG):
+                for abbr in abbrevs.values():
+                    logger.debug('Registered abbreviation: ' + abbr)
+            return lambda word, **kwargs: abbrevs.get(word.upper())
+    else:
+        if isinstance(file_path, str):
+            if not os.path.isfile(file_path):
+                logger.debug('No abbreviations file found at ' + str(file_path))
+                return lambda word, **kwargs: None
+
+            if = open(file_path)
+        else:
+            f = file_path
+
+        with f:
+            logger.debug('Reading abbreviations from file ' + f.name)
+            abbrevs = {abbr.upper(): abbr for abbr in abbrevs_gen}
+            if logger.isEnabledFor(logging.DEBUG):
+                for abbr in abbrevs.values():
+                    logger.debug('Registered abbreviation: ' + abbr)
+            return lambda word, **kwargs: abbrevs.get(word.upper())
 
 
 def cmd():
