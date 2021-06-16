@@ -209,36 +209,18 @@ def create_wordlist_filter_from_file(file_path):
     if file_path is None:
         logger.debug('No abbreviations file path given')
         return lambda word, **kwargs: None
-    if REGEX_AVAILABLE:
-        file_path_str = str(file_path)
-        if not os.path.isfile(file_path_str):
-            logger.debug('No abbreviations file found at ' + file_path_str)
-            return lambda word, **kwargs: None
-        with open(file_path_str) as f:
-            logger.debug('Reading abbreviations from file ' + file_path_str)
-            abbrevs_gen = (line.strip() for line in f.read().splitlines() if line)
-            abbrevs = {abbr.upper(): abbr for abbr in abbrevs_gen}
-            if logger.isEnabledFor(logging.DEBUG):
-                for abbr in abbrevs.values():
-                    logger.debug('Registered abbreviation: ' + abbr)
-            return lambda word, **kwargs: abbrevs.get(word.upper())
-    else:
-        if isinstance(file_path, str):
-            if not os.path.isfile(file_path):
-                logger.debug('No abbreviations file found at ' + str(file_path))
-                return lambda word, **kwargs: None
-
-            if = open(file_path)
-        else:
-            f = file_path
-
-        with f:
-            logger.debug('Reading abbreviations from file ' + f.name)
-            abbrevs = {abbr.upper(): abbr for abbr in abbrevs_gen}
-            if logger.isEnabledFor(logging.DEBUG):
-                for abbr in abbrevs.values():
-                    logger.debug('Registered abbreviation: ' + abbr)
-            return lambda word, **kwargs: abbrevs.get(word.upper())
+    file_path_str = str(file_path)
+    if not os.path.isfile(file_path_str):
+        logger.debug('No abbreviations file found at ' + file_path_str)
+        return lambda word, **kwargs: None
+    with open(file_path_str) as f:
+        logger.debug('Reading abbreviations from file ' + file_path_str)
+        abbrevs_gen = (line.strip() for line in f.read().splitlines() if line)
+        abbrevs = {abbr.upper(): abbr for abbr in abbrevs_gen}
+        if logger.isEnabledFor(logging.DEBUG):
+            for abbr in abbrevs.values():
+                logger.debug('Registered abbreviation: ' + abbr)
+        return lambda word, **kwargs: abbrevs.get(word.upper())
 
 
 def cmd():
