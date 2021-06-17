@@ -1,4 +1,4 @@
-name: test
+name: ci
 
 on: [push, pull_request]
 
@@ -9,7 +9,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
         python-version: [3.4, 3.5, 3.6, 3.7, 3.8, 3.9]
-      steps:
+    steps:
       - uses: actions/checkout@v2
       - name: Setup Python
         uses: actions/setup-python@v2
@@ -28,7 +28,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
         python-version: [3.4, 3.5, 3.6, 3.7, 3.8, 3.9]
-      steps:
+    steps:
       - uses: actions/checkout@v2
       - name: Setup Python
         uses: actions/setup-python@v2
