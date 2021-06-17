@@ -8,7 +8,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        python-version: [3.8, 3.9]
+        python-version: [3.4, 3.5, 3.6, 3.7, 3.8, 3.9]
     steps:
       - uses: actions/checkout@v2
       - name: Setup Python
@@ -19,8 +19,8 @@ jobs:
         run: python setup.py install
       - name: Tests
         run: |
-          pip install nose
-          nosetests
+          pip install tox
+          tox -e py
 
   build-with-optional-deps:
     runs-on: ubuntu-latest
