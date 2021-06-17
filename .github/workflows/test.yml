@@ -4,9 +4,10 @@ on: [push, pull_request]
 
 jobs:
   build-with-required-deps:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
+        os: [ubuntu-latest, macos-latest]
         python-version: [3.9]
     steps:
       - uses: actions/checkout@v2
