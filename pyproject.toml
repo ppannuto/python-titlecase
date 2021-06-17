@@ -1,0 +1,12 @@
+[build-system]
+# The assumed default build requirements from pip are: "setuptools>=40.8.0",
+#     "wheel"
+# See: https://pip.pypa.io/en/stable/reference/pip/#pep-517-and-518-support
+# These are taken from the PyScaffold example
+# See: https://github.com/pyscaffold/pyscaffold-demo
+requires = ["setuptools>=46.1.0", "setuptools_scm[toml]>=5", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools_scm]
+# See configuration details in https://github.com/pypa/setuptools_scm
+version_scheme = "no-guess-dev"
