@@ -1,0 +1,31 @@
+name: coverage
+
+
+on:
+  push:
+    branches:
+      - main
+  pull_request
+
+jobs:
+  build-with-regex:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.x"
+      - name: Install
+        run: |
+          pip install regex
+          python setup.py install
+      - name: Tests
+        run: |
+          pip install nose coveralls
+          coverage run --source=titlecase setup.py nosetests
+
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.COVERALLS_TOKEN }}
