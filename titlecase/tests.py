@@ -372,15 +372,17 @@ def test_set_small_word_list():
 
 
 def test_custom_abbreviations():
-    with tempfile.NamedTemporaryFile(mode='w') as f:
-        f.write('UDP\nPPPoE\n')
-        f.flush()
-        # This works without a wordlist, because it begins mixed case
-        assert titlecase('sending UDP packets over PPPoE works great') == 'Sending UDP Packets Over PPPoE Works Great'
-        # Without a wordlist, this will do the "wrong" thing for the context
-        assert titlecase('SENDING UDP PACKETS OVER PPPOE WORKS GREAT') == 'Sending Udp Packets Over Pppoe Works Great'
-        # A wordlist can provide custom acronyms
-        assert titlecase('sending UDP packets over PPPoE works great', callback=create_wordlist_filter_from_file(f.name)) == 'Sending UDP Packets Over PPPoE Works Great'
+    f = tempfile.NamedTemporaryFile(mode='w', delete=False)  # do not delete on close
+    f.write('UDP\nPPPoE\n')
+    f.flush()
+    # This works without a wordlist, because it begins mixed case
+    assert titlecase('sending UDP packets over PPPoE works great') == 'Sending UDP Packets Over PPPoE Works Great'
+    # Without a wordlist, this will do the "wrong" thing for the context
+    assert titlecase('SENDING UDP PACKETS OVER PPPOE WORKS GREAT') == 'Sending Udp Packets Over Pppoe Works Great'
+    # A wordlist can provide custom acronyms
+    assert titlecase('sending UDP packets over PPPoE works great', callback=create_wordlist_filter_from_file(f.name)) == 'Sending UDP Packets Over PPPoE Works Great'
+    f.close()  # manually close
+    os.unlink(f.name)  # manually delete
 
 
 if __name__ == "__main__":
