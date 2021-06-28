@@ -372,7 +372,8 @@ def test_set_small_word_list():
 
 
 def test_custom_abbreviations():
-    f = tempfile.NamedTemporaryFile(mode='w', delete=False)  # do not delete on close
+    # Do not delete on close, instead do manually for Windows (see #86).
+    f = tempfile.NamedTemporaryFile(mode='w', delete=False)
     f.write('UDP\nPPPoE\n')
     f.flush()
     # This works without a wordlist, because it begins mixed case
