@@ -21,12 +21,10 @@ jobs:
         run: |
           pip install regex
           python setup.py install
-      - name: Tests
+      - name: Coverage
+        env:
+          GITHUB_TOKEN: ${{ secrets.github_token }}
         run: |
           pip install nose coveralls
           coverage run --source=titlecase setup.py nosetests
-
-      - name: Coveralls
-        uses: coverallsapp/github-action@master
-        with:
-          github-token: ${{ secrets.COVERALLS_TOKEN }}
+          coveralls
