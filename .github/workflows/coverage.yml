@@ -27,4 +27,4 @@ jobs:
         run: |
           pip install nose coveralls
           coverage run --source=titlecase setup.py nosetests
-          coveralls
+          coveralls --service=github
