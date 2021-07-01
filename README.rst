@@ -1,10 +1,8 @@
 Titlecase
 =========
 
-.. image:: https://travis-ci.org/ppannuto/python-titlecase.svg?branch=main
-    :target: https://travis-ci.org/ppannuto/python-titlecase
-.. image:: https://coveralls.io/repos/github/ppannuto/python-titlecase/badge.svg?branch=main
-    :target: https://coveralls.io/github/ppannuto/python-titlecase?branch=main
+.. image:: https://codecov.io/gh/ppannuto/python-titlecase/branch/master/graph/badge.svg?token=J1Li8uhB8q
+    :target: https://codecov.io/gh/ppannuto/python-titlecase
 
 This filter changes a given text to Title Caps, and attempts to be clever
 about SMALL words like a/an/the in the input.
