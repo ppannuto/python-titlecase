@@ -1,30 +1,24 @@
-name: coverage
-
-on:
-  push:
-    branches:
-      main
-  pull_request:
-    branches:
-      main
-
+name: CodeCov
+on: [push, pull_request]
 jobs:
-  build-with-regex:
+  run-build-with-regex:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Setup Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: "3.x"
-      - name: Install
-        run: |
-          pip install regex
-          python setup.py install
-      - name: Coverage
-        env:
-          GITHUB_TOKEN: ${{ secrets.github_token }}
-        run: |
-          pip install nose coveralls
-          coverage run --source=titlecase setup.py nosetests
-          coveralls --service=github
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: '2'
+
+    - name: Setup Python
+      uses: actions/setup-python@master
+      with:
+        python-version: '3.x'
+    - name: Install Dependencies
+      run: |
+        pip install regex
+        python setup.py install
+    - name: Generate Coverage Report
+      run: |
+        pip install nose coverage
+        coverage run --source=titlecase setup.py nosetests
+    - name: Upload Coverage to Codecov
+      uses: codecov/codecov-action@v1
