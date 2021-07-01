@@ -1,7 +1,7 @@
 Titlecase
 =========
 
-.. image:: https://codecov.io/gh/ppannuto/python-titlecase/branch/master/graph/badge.svg?token=J1Li8uhB8q
+.. image:: https://codecov.io/gh/ppannuto/python-titlecase/branch/main/graph/badge.svg?token=J1Li8uhB8q
     :target: https://codecov.io/gh/ppannuto/python-titlecase
 
 This filter changes a given text to Title Caps, and attempts to be clever
