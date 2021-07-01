@@ -1,0 +1,24 @@
+name: CodeCov
+on: [push, pull_request]
+jobs:
+  run-build-with-regex:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: '2'
+
+    - name: Setup Python
+      uses: actions/setup-python@master
+      with:
+        python-version: '3.x'
+    - name: Install Dependencies
+      run: |
+        pip install regex
+        python setup.py install
+    - name: Generate Coverage Report
+      run: |
+        pip install nose coverage
+        coverage run --source=titlecase setup.py nosetests
+    - name: Upload Coverage to Codecov
+      uses: codecov/codecov-action@v1
