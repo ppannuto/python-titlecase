@@ -77,7 +77,7 @@ def set_small_word_list(small=SMALL):
     SUBPHRASE = regex.compile(r'([:.;?!][ ])(%s)' % small)
 
 
-def titlecase(text, callback=None, small_first_last=True):
+def titlecase(text, callback=None, small_first_last=True, preserve_blank_lines=False):
     """
     :param text: Titlecases input text
     :param callback: Callback function that returns the titlecase version of a specific word
@@ -93,7 +93,10 @@ def titlecase(text, callback=None, small_first_last=True):
     the New York Times Manual of Style, plus 'vs' and 'v'.
 
     """
-    lines = regex.split('[\r\n]+', text)
+    if preserve_blank_lines:
+        lines = regex.split('[\r\n]', text)
+    else:
+        lines = regex.split('[\r\n]+', text)
     processed = []
     for line in lines:
         all_caps = line.upper() == line
@@ -230,7 +233,7 @@ def cmd():
     # Consume '-f' and '-o' as input/output, allow '-' for stdin/stdout
     # and treat any subsequent arguments as a space separated string to
     # be titlecased (so it still works if people forget quotes)
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(allow_abbrev=False)
     in_group = parser.add_mutually_exclusive_group()
     in_group.add_argument('string', nargs='*', default=[],
             help='String to titlecase')
@@ -240,6 +243,8 @@ def cmd():
             help='File to write titlecased output to')
     parser.add_argument('-w', '--wordlist',
             help='Wordlist for acronyms')
+    parser.add_argument('--preserve-blank-lines', action='store_true',
+            help='Do not skip blank lines in input')
 
     args = parser.parse_args()
 
@@ -272,4 +277,5 @@ def cmd():
     wordlist_filter = create_wordlist_filter_from_file(wordlist_file)
 
     with ofile:
-        ofile.write(titlecase(in_string, callback=wordlist_filter))
+        ofile.write(titlecase(in_string, callback=wordlist_filter,
+            preserve_blank_lines=args.preserve_blank_lines))

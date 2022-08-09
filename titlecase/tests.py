@@ -386,6 +386,18 @@ def test_custom_abbreviations():
     os.unlink(f.name)  # manually delete
 
 
+def test_blank_lines():
+    # Really, it's a bit odd that the default behavior is to delete blank lines,
+    # but that's what it was from day one, so we're kind of stuck with that.
+    # This ensures folks can opt-out of that behavior if they want.
+    s = 'Line number one\n\nand Line three\n'
+    assert titlecase(s) == 'Line Number One\nAnd Line Three\n'
+    assert titlecase(s, preserve_blank_lines=True) == 'Line Number One\n\nAnd Line Three\n'
+    s = '\n\nLeading blank\n\n\nMulti-blank\n\n\n\n\nTrailing Blank\n\n'
+    assert titlecase(s) == '\nLeading Blank\nMulti-Blank\nTrailing Blank\n'
+    assert titlecase(s, preserve_blank_lines=True) == '\n\nLeading Blank\n\n\nMulti-Blank\n\n\n\n\nTrailing Blank\n\n'
+
+
 if __name__ == "__main__":
     import nose
     nose.main()
