@@ -19,8 +19,7 @@ jobs:
         run: python setup.py install
       - name: Tests
         run: |
-          pip install nose
-          nosetests
+          python -m unittest
 
   build-with-optional-deps:
     runs-on: ${{ matrix.os }}
@@ -40,5 +39,4 @@ jobs:
           python setup.py install
       - name: Tests
         run: |
-          pip install nose
-          nosetests
+          python -m unittest

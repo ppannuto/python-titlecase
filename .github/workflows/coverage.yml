@@ -18,7 +18,7 @@ jobs:
         python setup.py install
     - name: Generate Coverage Report
       run: |
-        pip install nose coverage
-        coverage run --source=titlecase setup.py nosetests
+        pip install coverage
+        coverage run -m unittest
     - name: Upload Coverage to Codecov
-      uses: codecov/codecov-action@v1
+      uses: codecov/codecov-action@v2
