@@ -1,7 +1,7 @@
 name: CodeCov
 on: [push, pull_request]
 jobs:
-  run-build-with-regex:
+  codecov-build-with-regex:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
