@@ -167,7 +167,7 @@ def titlecase(text, callback=None, small_first_last=True, preserve_blank_lines=F
             # too short (like "St", don't apply this)
             CONSONANTS = ''.join(set(string.ascii_lowercase)
                                  - {'a', 'e', 'i', 'o', 'u', 'y'})
-            is_all_consonants = regex.search('\A[' + CONSONANTS + ']+\Z', word,
+            is_all_consonants = regex.search(r'\A[' + CONSONANTS + r']+\Z', word,
                                              flags=regex.IGNORECASE)
             if is_all_consonants and len(word) > 2:
                 tc_line.append(word.upper())
