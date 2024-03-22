@@ -12,7 +12,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../'))
 from titlecase import titlecase, set_small_word_list, create_wordlist_filter_from_file
 
 
-# (executed by `test_input_output` below)
+# (executed by `test_specific_string` below)
 TEST_DATA = (
     (
         "",
