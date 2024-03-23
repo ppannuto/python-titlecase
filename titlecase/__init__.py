@@ -82,9 +82,11 @@ def titlecase(text, callback=None, small_first_last=True, preserve_blank_lines=F
     :param text: Titlecases input text
     :param callback: Callback function that returns the titlecase version of a specific word
     :param small_first_last: Capitalize small words (e.g. 'A') at the beginning; disabled when recursing
+    :param preserve_blank_lines: Preserve blank lines in the output
     :type text: str
     :type callback: function
     :type small_first_last: bool
+    :type preserve_blank_lines: bool
 
     This filter changes all words to Title Caps, and attempts to be clever
     about *un*capitalizing SMALL words like a/an/the in the input.
