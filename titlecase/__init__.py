@@ -77,16 +77,18 @@ def set_small_word_list(small=SMALL):
     SUBPHRASE = regex.compile(r'([:.;?!][ ])(%s)' % small)
 
 
-def titlecase(text, callback=None, small_first_last=True, preserve_blank_lines=False):
+def titlecase(text, callback=None, small_first_last=True, preserve_blank_lines=False, normalise_space_characters=False):
     """
     :param text: Titlecases input text
     :param callback: Callback function that returns the titlecase version of a specific word
     :param small_first_last: Capitalize small words (e.g. 'A') at the beginning; disabled when recursing
     :param preserve_blank_lines: Preserve blank lines in the output
+    :param normalise_space_characters: Convert all original spaces to normal space characters
     :type text: str
     :type callback: function
     :type small_first_last: bool
     :type preserve_blank_lines: bool
+    :type normalise_space_characters: bool
 
     This filter changes all words to Title Caps, and attempts to be clever
     about *un*capitalizing SMALL words like a/an/the in the input.
@@ -102,7 +104,9 @@ def titlecase(text, callback=None, small_first_last=True, preserve_blank_lines=F
     processed = []
     for line in lines:
         all_caps = line.upper() == line
-        words = regex.split('[\t ]', line)
+        split_line = regex.split(r'(\s)', line)
+        words = split_line[::2]
+        spaces = split_line[1::2]
         tc_line = []
         for word in words:
             if callback:
@@ -190,7 +194,13 @@ def titlecase(text, callback=None, small_first_last=True, preserve_blank_lines=F
                     lambda m: m.group(0).capitalize(), tc_line[-1]
                 )
 
-        result = " ".join(tc_line)
+        if normalise_space_characters:
+            result = " ".join(tc_line)
+        else:
+            line_to_be_joined = tc_line + spaces
+            line_to_be_joined[::2] = tc_line
+            line_to_be_joined[1::2] = spaces
+            result = "".join(line_to_be_joined)
 
         result = SUBPHRASE.sub(lambda m: '%s%s' % (
             m.group(1),
