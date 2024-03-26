@@ -12,7 +12,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../'))
 from titlecase import titlecase, set_small_word_list, create_wordlist_filter_from_file
 
 
-# (executed by `test_input_output` below)
+# (executed by `test_specific_string` below)
 TEST_DATA = (
     (
         "",
@@ -307,6 +307,10 @@ TEST_DATA = (
         "Mr mr Mrs Ms Mss Dr dr , Mr. and Mrs. Person",
         "Mr Mr Mrs Ms MSS Dr Dr , Mr. And Mrs. Person",
     ),
+    (
+        "a mix of\tdifferent\u200aspace\u2006characters",
+        "A Mix of\tDifferent\u200aSpace\u2006Characters",
+    ),
 )
 
 
@@ -429,6 +433,16 @@ class TestBlankLines(unittest.TestCase):
         self.assertEqual(titlecase(s, preserve_blank_lines=True),
                 '\n\nLeading Blank\n\n\nMulti-Blank\n\n\n\n\nTrailing Blank\n\n')
 
+class TestNormaliseSpaceCharacters(unittest.TestCase):
+    def test_tabs(self):
+        s = 'text\twith\ttabs'
+        self.assertEqual(titlecase(s), 'Text\tWith\tTabs')
+        self.assertEqual(titlecase(s, normalise_space_characters=True), 'Text With Tabs')
+
+    def test_nbsps(self):
+        s = 'text with nonbreaking spaces'
+        self.assertEqual(titlecase(s), 'Text With Nonbreaking Spaces')
+        self.assertEqual(titlecase(s, normalise_space_characters=True), 'Text With Nonbreaking Spaces')
 
 if __name__ == '__main__':
     unittest.main()
