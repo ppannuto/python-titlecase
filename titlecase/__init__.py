@@ -9,6 +9,8 @@ License: http://www.opensource.org/licenses/mit-license.php
 
 import argparse
 import logging
+from typing import TYPE_CHECKING
+
 logger = logging.getLogger(__name__)
 import os
 import string
@@ -22,10 +24,21 @@ except ImportError:
 else:
     REGEX_AVAILABLE = True
 
+if TYPE_CHECKING:
+    from typing import Final, Protocol, Union
+
+    from typing_extensions import LiteralString
+
+    class CallbackProtocol(Protocol):
+        def __call__(
+            self, word: str, *, all_caps: bool, **kwargs
+        ) -> Union[str, None]: ...
+
+
 __all__ = ['titlecase']
 __version__ = '2.4.1'
 
-SMALL = r'a|an|and|as|at|but|by|en|for|if|in|of|on|or|the|to|v\.?|via|vs\.?'
+SMALL: 'Final' = r'a|an|and|as|at|but|by|en|for|if|in|of|on|or|the|to|v\.?|via|vs\.?'
 PUNCT = r"""!"“#$%&'‘()*+,\-–‒—―./:;?@[\\\]_`{|}~"""
 
 SMALL_WORDS = regex.compile(r'^(%s)$' % SMALL, regex.I)
@@ -49,12 +62,13 @@ else:
     APOS_SECOND = regex.compile(r"^[dol]['‘][\w]+(?:['s]{2})?$", regex.I)
     UC_INITIALS = regex.compile(r"^(?:[A-Z]\.|[A-Z]\.[A-Z])+$")
 
-
 class Immutable(object):
     pass
 
+
 class ImmutableString(str, Immutable):
     pass
+
 
 class ImmutableBytes(bytes, Immutable):
     pass
@@ -66,7 +80,7 @@ def _mark_immutable(text):
     return ImmutableString(text)
 
 
-def set_small_word_list(small=SMALL):
+def set_small_word_list(small: 'LiteralString' = SMALL) -> None:
     global SMALL_WORDS
     global SMALL_FIRST
     global SMALL_LAST
@@ -77,7 +91,13 @@ def set_small_word_list(small=SMALL):
     SUBPHRASE = regex.compile(r'([:.;?!][ ])(%s)' % small)
 
 
-def titlecase(text, callback=None, small_first_last=True, preserve_blank_lines=False, normalise_space_characters=False):
+def titlecase(
+    text: str,
+    callback: 'Union[CallbackProtocol, None]' = None,
+    small_first_last: bool = True,
+    preserve_blank_lines: bool = False,
+    normalise_space_characters: bool = False,
+) -> 'LiteralString':
     """
     :param text: Titlecases input text
     :param callback: Callback function that returns the titlecase version of a specific word
@@ -214,7 +234,9 @@ def titlecase(text, callback=None, small_first_last=True, preserve_blank_lines=F
     return result
 
 
-def create_wordlist_filter_from_file(file_path):
+def create_wordlist_filter_from_file(
+    file_path: 'Union[str, None]',
+) -> 'CallbackProtocol':
     '''
     Load a list of abbreviations from the file with the provided path,
     reading one abbreviation from each line, and return a callback to
