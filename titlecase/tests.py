@@ -416,20 +416,6 @@ class TestCustomAbbreviations(unittest.TestCase):
             'Sending UDP Packets Over PPPoE Works Great')
 
 
-class TestCurlyQuotes(unittest.TestCase):
-    def test_right_curly_quotes(self):
-        for source, expected in [
-            ('’tis the season', '’Tis the Season'),
-            ('he said “’tis the season”', 'He Said “’Tis the Season”'),
-            ('’twas a good day', '’Twas a Good Day'),
-            ('a title about “the”', 'A Title About “The”'),
-            ('’the final word', '’The Final Word'),
-            ('’TIS THE SEASON', '’Tis the Season'),
-        ]:
-            with self.subTest(source=source):
-                self.assertEqual(titlecase(source), expected)
-
-
 class TestBlankLines(unittest.TestCase):
     # Really, it's a bit odd that the default behavior is to delete blank lines,
     # but that's what it was from day one, so we're kind of stuck with that.
@@ -457,6 +443,20 @@ class TestNormaliseSpaceCharacters(unittest.TestCase):
         s = 'text with nonbreaking spaces'
         self.assertEqual(titlecase(s), 'Text With Nonbreaking Spaces')
         self.assertEqual(titlecase(s, normalise_space_characters=True), 'Text With Nonbreaking Spaces')
+
+class TestCurlyQuotes(unittest.TestCase):
+    def test_right_curly_quotes(self):
+        for source, expected in [
+            ('’tis the season', '’Tis the Season'),
+            ('he said “’tis the season”', 'He Said “’Tis the Season”'),
+            ('’twas a good day', '’Twas a Good Day'),
+            ('a title about “the”', 'A Title About “The”'),
+            ('’the final word', '’The Final Word'),
+            ('’TIS THE SEASON', '’Tis the Season'),
+        ]:
+            with self.subTest(source=source):
+                self.assertEqual(titlecase(source), expected)
+
 
 if __name__ == '__main__':
     unittest.main()
