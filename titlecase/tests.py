@@ -444,5 +444,19 @@ class TestNormaliseSpaceCharacters(unittest.TestCase):
         self.assertEqual(titlecase(s), 'Text With Nonbreaking Spaces')
         self.assertEqual(titlecase(s, normalise_space_characters=True), 'Text With Nonbreaking Spaces')
 
+class TestCurlyQuotes(unittest.TestCase):
+    def test_right_curly_quotes(self):
+        for source, expected in [
+            ('’tis the season', '’Tis the Season'),
+            ('he said “’tis the season”', 'He Said “’Tis the Season”'),
+            ('’twas a good day', '’Twas a Good Day'),
+            ('a title about “the”', 'A Title About “The”'),
+            ('’the final word', '’The Final Word'),
+            ('’TIS THE SEASON', '’Tis the Season'),
+        ]:
+            with self.subTest(source=source):
+                self.assertEqual(titlecase(source), expected)
+
+
 if __name__ == '__main__':
     unittest.main()
