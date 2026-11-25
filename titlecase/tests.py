@@ -416,6 +416,30 @@ class TestCustomAbbreviations(unittest.TestCase):
             'Sending UDP Packets Over PPPoE Works Great')
 
 
+class TestApostropheNames(unittest.TestCase):
+    def test_apostrophe_names_on_all_caps_lines(self):
+        for source, expected in [
+            ("D'ARTEMIS OF LONDON", "d'Artemis of London"),
+            ("O'BRIEN AND D'ARCY", "O'Brien and d'Arcy"),
+            ("O'BRIEN'S HOUSE IS FOR SALE", "O'Brien's House Is for Sale"),
+            ("L'AVENTURE", "l'Aventure"),
+            ("O‘BRIEN AND D‘ARCY", "O‘Brien and d‘Arcy"),
+            ("meet O'BRIEN and d'Artemis", "Meet O'BRIEN and d'Artemis"),
+        ]:
+            with self.subTest(source=source):
+                self.assertEqual(titlecase(source), expected)
+
+    def test_apostrophe_callback_keeps_original_input(self):
+        calls = []
+
+        def callback(word, **kwargs):
+            calls.append((word, kwargs['all_caps']))
+            return word
+
+        self.assertEqual(titlecase("O'BRIEN", callback=callback), "O'BRIEN")
+        self.assertEqual(calls, [("O'BRIEN", True)])
+
+
 class TestBlankLines(unittest.TestCase):
     # Really, it's a bit odd that the default behavior is to delete blank lines,
     # but that's what it was from day one, so we're kind of stuck with that.

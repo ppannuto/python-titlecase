@@ -123,6 +123,8 @@ def titlecase(text, callback=None, small_first_last=True, preserve_blank_lines=F
                     continue
 
             if APOS_SECOND.match(word):
+                if all_caps:
+                    word = word.lower()
                 if len(word[0]) == 1 and word[0] not in 'aeiouAEIOU':
                     word = word[0].lower() + word[1] + word[2].upper() + word[3:]
                 else:
