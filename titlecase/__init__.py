@@ -82,7 +82,7 @@ def titlecase(text, callback=None, small_first_last=True, preserve_blank_lines=F
     :param text: Titlecases input text
     :param callback: Callback function that returns the titlecase version of a specific word
     :param small_first_last: Capitalize small words (e.g. 'A') at the beginning; disabled when recursing
-    :param preserve_blank_lines: Preserve blank lines in the output
+    :param preserve_blank_lines: Preserve blank lines and original line endings in the output
     :param normalise_space_characters: Convert all original spaces to normal space characters
     :type text: str
     :type callback: function
@@ -98,7 +98,9 @@ def titlecase(text, callback=None, small_first_last=True, preserve_blank_lines=F
 
     """
     if preserve_blank_lines:
-        lines = regex.split('[\r\n]', text)
+        lines = regex.split(r'(\r\n|\r|\n)', text)
+        line_endings = iter(lines[1::2])
+        lines = lines[::2]
     else:
         lines = regex.split('[\r\n]+', text)
     processed = []
@@ -207,9 +209,11 @@ def titlecase(text, callback=None, small_first_last=True, preserve_blank_lines=F
             m.group(2).capitalize()
         ), result)
 
+        if preserve_blank_lines:
+            result += next(line_endings, '')
         processed.append(result)
 
-    result = "\n".join(processed)
+    result = ("" if preserve_blank_lines else "\n").join(processed)
     logger.debug(result)
     return result
 

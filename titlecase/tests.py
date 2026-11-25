@@ -421,6 +421,27 @@ class TestBlankLines(unittest.TestCase):
     # but that's what it was from day one, so we're kind of stuck with that.
     # This ensures folks can opt-out of that behavior if they want.
 
+    def test_preserves_line_endings(self):
+        for newline in ('\n', '\r\n', '\r'):
+            for blanks in (1, 2, 3):
+                with self.subTest(newline=newline, blanks=blanks):
+                    source = newline + 'one line' + newline * blanks + 'and another' + newline
+                    expected = newline + 'One Line' + newline * blanks + 'And Another' + newline
+                    self.assertEqual(titlecase(source, preserve_blank_lines=True), expected)
+
+    def test_preserves_mixed_line_endings(self):
+        self.assertEqual(
+            titlecase('one\r\n\ntwo\rthree\n', preserve_blank_lines=True),
+            'One\r\n\nTwo\rThree\n')
+
+    def test_empty_input_and_line_endings_only(self):
+        for source in ('', '\r\n', '\r\n\r\n', '\r\n\n\r'):
+            with self.subTest(source=source):
+                self.assertEqual(titlecase(source, preserve_blank_lines=True), source)
+
+    def test_default_still_collapses_blank_lines(self):
+        self.assertEqual(titlecase('one\r\n\r\ntwo\rthree\n'), 'One\nTwo\nThree\n')
+
     def test_one_blank(self):
         s = 'Line number one\n\nand Line three\n'
         self.assertEqual(titlecase(s), 'Line Number One\nAnd Line Three\n')
